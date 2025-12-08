@@ -1,0 +1,21 @@
+version: "3.9"
+
+
+services:
+  mysql:
+      image: mysql:8.0
+      container_name: mysql
+      environment:
+        - MYSQL_ROOT_PASSWORD=YourPassword123
+        - MYSQL_DATABASE=TamaraResDB
+        - MYSQL_USER=tamara
+        - MYSQL_PASSWORD=tamara123
+      ports:
+        - "3307:3306"
+      volumes:
+        - tamara_data:/var/lib/mysql
+        - ./db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      restart: always
+
+volumes:
+  tamara_data:
