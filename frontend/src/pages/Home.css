@@ -1,0 +1,86 @@
+/* Page container */
+.home-page {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #fff3e0, #ffe0b2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+  }
+  
+  /* Title */
+  .home-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #d35400; /* warm orange */
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  /* Subtitle */
+  .home-subtitle {
+    font-size: 1.2rem;
+    color: #555;
+    text-align: center;
+    max-width: 600px;
+    margin-bottom: 2rem;
+  }
+  
+  /* Dishes grid */
+  .dishes-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1100px;
+    margin-top: 2rem;
+  }
+  /* Audio Recorder container */
+.audio-recorder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+  }
+  
+  .audio-recorder button {
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 9999px; /* round buttons */
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
+    margin-bottom: 0.5rem;
+  }
+  
+  .audio-recorder button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .audio-recorder .start-btn {
+    background-color: #e67e22;
+    color: white;
+  }
+  
+  .audio-recorder .stop-btn {
+    background-color: #c0392b;
+    color: white;
+  }
+  
+  .audio-recorder p {
+    margin-top: 0.5rem;
+    color: #555;
+    font-size: 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .dishes-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
