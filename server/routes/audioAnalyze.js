@@ -5,7 +5,7 @@ import fs from "fs";
 import dotenv from "dotenv";
 import ffmpeg from "fluent-ffmpeg";
 import path from "path"; 
-import {prompt} from "../prompt.js";
+import prompt from "../prompt.js";
 import {
     GoogleGenAI
   } from '@google/genai';
@@ -70,7 +70,6 @@ router.post("/analyze-audio", upload.single("audio"), async (req, res) => {
         
         await convertToMp3(originalFilePath, convertedFilePath);
 
-        const prompt = prompt;
         const audioPart = fileToGenerativePart(convertedFilePath, "audio/mp3"); 
         const contents = [{ text: prompt }, audioPart];
 
