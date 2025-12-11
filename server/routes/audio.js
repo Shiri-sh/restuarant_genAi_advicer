@@ -1,27 +1,5 @@
-// import express from "express";
-// import multer from "multer"; // נדרש כדי לקבל קבצים ב-POST
-
-// const router = express.Router();
-// const upload = multer(); // שמירה בזיכרון בלבד
-
-// router.post("/audio", upload.single("audio"), (req, res) => {
-//   try {
-//     console.log("Audio received:", req.file); 
-//     res.json({
-//       message: "Audio received successfully!",
-//       filename: req.file.originalname,
-//       size: req.file.size,
-//     });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: "Server error" });
-//   }
-// });
-
-// export default router;
 import express from "express";
 import multer from "multer";
-import path from "path";
 
 const router = express.Router();
 
@@ -52,4 +30,3 @@ router.post("/audio", upload.single("audio"), (req, res) => {
 });
 
 export default router;
-    
