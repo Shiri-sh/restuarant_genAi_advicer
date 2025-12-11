@@ -19,5 +19,13 @@ const addDish=async(name,price,ingredients,image_url,category_id,is_vegan,is_veg
         throw err;
     }
 };
-
-export { getDishes, addDish };
+const getDishesByName = async (name) => {
+    try {
+      const sql = "SELECT * FROM dishes WHERE name = ?";
+      const [rows] = await con.query(sql, [name]);
+      return rows[0];
+    } catch (err) {
+      throw err;
+    }
+  };
+export { getDishes, addDish, getDishByName };
