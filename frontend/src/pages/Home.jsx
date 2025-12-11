@@ -1,12 +1,14 @@
 import React from "react";
 import AudioRecorder from "../components/AudioRecorder";
 import DishCard from "../components/DishCard";
+import { useState } from "react";
 import "./Home.css";
 //{ dishes, setDishes }
 export default function Home() {
-
+  const [analysis, setAnalysis] = useState(null);
     const handleAudioResult = (results) => {
         console.log("Audio results received:", results);
+        setAnalysis(results.analysis);
       };
 
       
@@ -19,6 +21,12 @@ export default function Home() {
 
       {/* <AudioRecorder onResult={setDishes} /> */}
       <AudioRecorder onResult={handleAudioResult} />
+      {analysis && (
+  <div className="analysis-box">
+    <h2>AI Analysis</h2>
+    <p>{analysis}</p>
+  </div>
+)}
       {/* <div className="dishes-grid">
 
         {dishes.map((dish) => (

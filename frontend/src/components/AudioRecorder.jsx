@@ -21,12 +21,17 @@ export default function AudioRecorder({ onResult }) {
         setLoading(true);
         const blob = new Blob(chunksRef.current, { type: "audio/webm" });
         console.log(chunksRef);
-
         console.log("Audio blob:", blob);
-        const recommendations = await sendAudioToServer(blob); // API
-        console.log("Server response:", recommendations);
-       onResult(recommendations); // שולח תוצאות לדף האב
-        setLoading(false);
+        try{
+          const recommendations = await sendAudioToServer(blob); 
+          console.log("Server response:", recommendations);
+         onResult(recommendations); 
+          setLoading(false);
+        }
+       catch (error) {
+          console.error("Error sending audio to server:", error);
+          setLoading(false);
+        }
       };
 
       mediaRecorder.start();
