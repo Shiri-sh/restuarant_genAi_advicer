@@ -77,6 +77,48 @@
     color: #555;
     font-size: 1rem;
   }
+  .analysis-box {
+    background: #ffffffd8;
+    padding: 20px;
+    margin-top: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    width: 80%;
+    max-width: 700px;
+    border: 1px solid #ececec;
+    direction: rtl; /* תמיכה בעברית */
+    text-align: right;
+    margin-left: auto;
+    margin-right: auto;
+    animation: fadeIn 0.5s ease;
+  }
+  
+  .analysis-box h2 {
+    margin-top: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #222;
+    text-align: center;
+  }
+  
+  .analysis-box p {
+    font-size: 18px;
+    line-height: 1.6;
+    white-space: pre-wrap; /* שומר על פורמט ונקודות */
+    color: #444;
+  }
+  
+  /* אנימציה חלקה */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
   
   @media (min-width: 768px) {
     .dishes-grid {
