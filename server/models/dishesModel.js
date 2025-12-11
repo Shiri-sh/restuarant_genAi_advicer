@@ -28,4 +28,4 @@ const getDishesByName = async (name) => {
       throw err;
     }
   };
-export { getDishes, addDish, getDishByName };
+export { getDishes, addDish, getDishesByName };

@@ -27,3 +27,4 @@ Requirements:
 - Keep the reason concise, clear, and actionable.
 - If multiple dishes are suitable, include them all in the list in descending order of relevance.but no more than 5 dishes
 `
+export default prompt;
