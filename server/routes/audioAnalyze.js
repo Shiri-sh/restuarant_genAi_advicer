@@ -1,53 +1,21 @@
 
 import express from "express";
-import multer from "multer";
 import fs from "fs";
 import dotenv from "dotenv";
-import ffmpeg from "fluent-ffmpeg";
 import path from "path"; 
-import prompt from "../prompt.js";
-import {
-    GoogleGenAI
-  } from '@google/genai';
+import prompt from "../services/prompt.js";
+import multer from "multer";
+import { storage } from "../services/storage.js";
+import {GoogleGenAI} from '@google/genai';
+import { convertToMp3, fileToGenerativePart } from "../services/fileActions.js";
 
 dotenv.config();
 
 const router = express.Router();
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, path.join(process.cwd(), "uploads"));
-    },
-    filename: function (req, file, cb) {
-      cb(null, Date.now() + "-" + file.originalname);
-    },
-  });
-  
+
 const upload = multer({ storage });
 
-// 3. פונקציות עזר (כפי שהוגדרו)
-function fileToGenerativePart(filePath, mimeType) {
-  return {
-    inlineData: {
-      data: fs.readFileSync(filePath).toString("base64"),
-      mimeType,
-    },
-  };
-}
-
-const convertToMp3 = (inputPath, outputPath) => {
-    return new Promise((resolve, reject) => {
-        ffmpeg(inputPath)
-            .toFormat('mp3')
-            .on('error', (err) => {
-                console.error("FFmpeg Conversion Error:", err.message);
-                reject(new Error(`Conversion failed: ${err.message}`));
-            })
-            .on('end', () => {
-                resolve(outputPath);
-            })
-            .save(outputPath);
-    });
-};
+const ai = new GoogleGenAI({ apiKey: process.env.GENAI_API_KEY });
 
 router.post("/analyze-audio", upload.single("audio"), async (req, res) => {
     
@@ -73,15 +41,15 @@ router.post("/analyze-audio", upload.single("audio"), async (req, res) => {
         const audioPart = fileToGenerativePart(convertedFilePath, "audio/mp3"); 
         const contents = [{ text: prompt }, audioPart];
 
-        const ai = new GoogleGenAI({
-            apiKey: process.env.GENAI_API_KEY,
-        });
+        console.log("contents:", contents);
 
         const result = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: contents,
         });
-        console.log(result.text);   
+
+        console.log(result.text);
+
         res.json({
           success: true,
           analysis: result.text,

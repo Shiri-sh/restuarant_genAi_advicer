@@ -7,7 +7,6 @@ import "./Home.css";
 export default function Home() {
   const [analysis, setAnalysis] = useState(null);
     const handleAudioResult = (results) => {
-        console.log("Audio results received:", results);
         setAnalysis(results.analysis);
       };
 
