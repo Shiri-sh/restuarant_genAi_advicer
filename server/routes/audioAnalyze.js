@@ -1,4 +1,6 @@
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 import express from "express";
 import fs from "fs";
 import dotenv from "dotenv";
@@ -41,8 +43,6 @@ router.post("/analyze-audio", upload.single("audio"), async (req, res) => {
         const audioPart = fileToGenerativePart(convertedFilePath, "audio/mp3"); 
         const contents = [{ text: prompt }, audioPart];
 
-        console.log("contents:", contents);
-
         const result = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: contents,
@@ -56,7 +56,7 @@ router.post("/analyze-audio", upload.single("audio"), async (req, res) => {
         });
     
     } catch (err) {
-        console.error("Audio analysis or internal server error:", err);
+        console.error('Full error stack:', err.stack || err, 'code:', err.code || null);
         if (originalFilePath && fs.existsSync(originalFilePath)) fs.unlinkSync(originalFilePath);
         if (convertedFilePath && fs.existsSync(convertedFilePath)) fs.unlinkSync(convertedFilePath);
     

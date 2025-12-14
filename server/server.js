@@ -13,4 +13,7 @@ app.use(express.json());
 app.use("/api", audioAnalyzeRouter);
 
 const PORT = 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`API Key: ${process.env.GENAI_API_KEY}`);
+});
