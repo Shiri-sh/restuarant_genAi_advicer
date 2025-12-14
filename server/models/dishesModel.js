@@ -23,7 +23,18 @@ const getDishesByName = async (name) => {
     try {
       const sql = "SELECT * FROM dishes WHERE name = ?";
       const [rows] = await con.query(sql, [name]);
-      return rows[0];
+      return{
+        id: rows[0].id,
+        name: rows[0].name,
+        price: rows[0].price,
+        image_url: rows[0].image_url,
+        ingredients: rows[0].ingredients,
+        category_id: rows[0].category_id,
+        is_vegan: rows[0].is_vegan,
+        is_vegetarian: rows[0].is_vegetarian,
+        on_sale: rows[0].on_sale,
+        sale_price: rows[0].sale_price
+      };
     } catch (err) {
       throw err;
     }
