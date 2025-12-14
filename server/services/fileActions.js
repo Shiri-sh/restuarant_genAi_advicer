@@ -1,6 +1,6 @@
 import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
-
+let ffmpegConfigured = false;
 function fileToGenerativePart(filePath, mimeType) {
   return {
     inlineData: {
@@ -11,7 +11,13 @@ function fileToGenerativePart(filePath, mimeType) {
 }
 
 const convertToMp3 = (inputPath, outputPath) => {
+  if (!ffmpegConfigured) {
+    ffmpeg.setFfmpegPath("/usr/bin/ffmpeg");
+    ffmpeg.setFfprobePath("/usr/bin/ffprobe");
+    ffmpegConfigured = true;
+  }
     return new Promise((resolve, reject) => {
+      console.log("Converting file:", inputPath, fs.existsSync(inputPath));
         ffmpeg(inputPath)
             .toFormat('mp3')
             .on('error', (err) => {
