@@ -7,6 +7,8 @@ RUN apt-get update && \
     apt-get install -y ffmpeg wget ca-certificates bash && \
     rm -rf /var/lib/apt/lists/*
 
+
+
 # התקנת npm בלי אימות SSL
 ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 
