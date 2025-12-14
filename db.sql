@@ -127,8 +127,8 @@ INSERT INTO dishes (
  'Lettuce mix, zaatar, olive oil, cherry tomatoes, cucumbers, olives and red onion.',
  8, TRUE, TRUE, TRUE, FALSE, NULL);
 
----update_url_pic.sql
---USE TamaraResDB;
+-- update_url_pic.sql
+-- USE TamaraResDB;
 
 UPDATE dishes 
 SET image_url='server/images/dishes/chips.png' 

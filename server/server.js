@@ -14,6 +14,8 @@ app.use("/api", audioAnalyzeRouter);
 
 const PORT = 5000;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on port ${process.env.PORT }`);
     console.log(`API Key: ${process.env.GENAI_API_KEY}`);
+    console.log(`Database Host: ${process.env.MYSQL_HOST}`);
+    console.log(`Database User: ${process.env.MYSQL_USER}`);
 });

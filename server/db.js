@@ -14,5 +14,5 @@ const con = mysql.createPool({
 con.getConnection()
   .then(() => console.log('Connected to the database.'))
   .catch(err => console.error('Database connection failed:', err));
-  
+
 export default con;
