@@ -1,18 +1,24 @@
-FROM node:22-alpine
+FROM node:22-slim
 
 WORKDIR /usr/src/app
 
-# Copy package metadata
-COPY package*.json ./
+# התקנת ffmpeg וכלים בסיסיים
+RUN apt-get update && \
+    apt-get install -y ffmpeg wget ca-certificates bash && \
+    rm -rf /var/lib/apt/lists/*
 
-# Tell npm to ignore SSL issues
+# התקנת npm בלי אימות SSL
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
+
+# Copy package metadata and install dependencies
+COPY package*.json ./
 RUN npm set strict-ssl false
 RUN npm install --legacy-peer-deps
+
 # Copy all app files
 COPY . .
 
 ENV NODE_ENV=development
 EXPOSE 5000
 
-# Use nodemon to watch the app for changes
 CMD ["npx", "nodemon", "server.js", "--watch", ".", "--ext", "js,env", "--legacy-watch"]
