@@ -1,6 +1,6 @@
 import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
-let ffmpegConfigured = false;
+let ffmpegConfigured = true;
 function fileToGenerativePart(filePath, mimeType) {
   return {
     inlineData: {
