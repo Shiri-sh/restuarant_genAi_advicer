@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { sendAudioToServer } from "../services/api";
-import "./AudioRecorder.css";
+import "../pages/AudioRecorder.css";
 import { Mic } from 'lucide-react';
 
 export default function AudioRecorder({ onResult }) {
@@ -53,13 +53,20 @@ export default function AudioRecorder({ onResult }) {
     setIsRecording(false);
   };
 
+  const toggleRecording = () => {
+  if (isRecording) {
+    stopRecording();
+  } else {
+    startRecording();
+  }
+};
    return (
     <div className="audio-recorder">
       <div
         className={`record-circle ${isRecording ? "recording" : ""}`}
         onClick={toggleRecording}
       >
-        <Mic size={48} color={isRecording ? "red" : "black"} />
+        <Mic size={20} color={isRecording ? "red" : "black"} />
         {isRecording && (
           <div className="waves">
             <span />

@@ -1,16 +1,35 @@
 /* ====================================================================
+   0. CSS Variables / Global Colors
+==================================================================== */
+:root {
+  /* Base Colors */
+  --color-bg-light: #d8d5d5;       /* אפור בהיר לרקע */
+  --color-bg-dark: #ffffff;        /* לבן */
+  --color-text-primary: #333333;   /* טקסט ראשי אפור כהה */
+  --color-text-secondary: #555555; /* טקסט משני */
+  
+  /* Accent Colors */
+  --color-accent-orange: #e67e22;
+  --color-accent-red: #c0392b;
+  --color-accent-dark-red: #d35400;
+  
+  /* Shadows */
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --shadow-medium: rgba(0, 0, 0, 0.15);
+  --shadow-dark: rgba(0, 0, 0, 0.18);
+}
+
+/* ====================================================================
    I. Layout & Page Structure
 ==================================================================== */
-
-/* --- Page Container --- */
 .home-page {
   min-height: 100vh;
-  background: linear-gradient(to bottom, #fff3e0, #ffe0b2);
+  background: linear-gradient(to bottom, var(--color-bg-light), var(--color-bg-dark));
   display: flex;
   flex-direction: column;
   align-items: center;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 /* --- Dishes Grid --- */
@@ -25,15 +44,13 @@
 
 @media (min-width: 768px) {
   .dishes-grid {
-      grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 /* ====================================================================
    II. Header & Slideshow
 ==================================================================== */
-
-/* --- Header Background + Slideshow Container --- */
 .header-background {
   position: relative;
   width: 100%;
@@ -46,25 +63,11 @@
 .header-background::after {
   content: '';
   position: absolute;
-  inset: 0; /* top:0; left:0; right:0; bottom:0; */
-  background-color: rgba(255, 255, 255, 0.4); /* שקיפות של 30% */
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.4);
   z-index: 1;
 }
 
-/* --- Slider Track & Images --- */
-.slider-track {
-  display: flex;
-  width: calc(200%); /* מכפילים את התמונות כדי לגרום ל-loop חלק */
-  animation: slide 20s linear infinite;
-}
-.slider-image {
-  min-width: 33.3333%; /* שלוש תמונות בכל “מסך” */
-  height: 400px;
-  background-size: cover;
-  background-position: center;
-}
-
-/* --- Slideshow (If used for fading instead of sliding) --- */
 .slideshow {
   position: absolute;
   top: 0;
@@ -77,87 +80,42 @@
   animation: fadeContinuous 15s linear infinite;
 }
 
-/* --- Header Text Content --- */
 .header-content {
   position: absolute;
   z-index: 2;
   text-align: center;
-  color: white;
-  text-shadow: 0 0 10px rgba(0,0,0,0.5);
+  color: var(--color-bg-dark);
+  text-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
 
-/* --- Title & Subtitle (Inside Header) --- */
 .home-title {
-  font-size: 3rem; /* שונה לגודל יותר בולט */
+  font-size: 3rem;
   font-weight: 700;
-  color: #d35400; /* warm orange */
-  margin-bottom: 1rem;
+  color: var(--color-accent-dark-red);
+  margin-bottom: 0.2rem;
 }
 
 .home-subtitle {
-  font-size: 1.5rem; /* שונה קצת יותר גדול */
-  color: #555;
+  font-size: 1.5rem;
+  color: var(--color-text-secondary);
   text-align: center;
-  max-width: 600px;
+  max-width: 1000px;
   margin-bottom: 2rem;
-  margin: auto;
+  margin-top: 0;
 }
 
 /* ====================================================================
    III. Components
 ==================================================================== */
 
-/* --- Audio Recorder Container --- */
-.audio-recorder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 1rem;
-}
-
-/* --- Audio Recorder Elements --- */
-.audio-recorder button {
-  padding: 0.75rem 2rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 9999px; /* round buttons */
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease-in-out;
-  margin-bottom: 0.5rem;
-}
-
-.audio-recorder button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-}
-
-.audio-recorder .start-btn {
-  background-color: #e67e22;
-  color: white;
-}
-
-.audio-recorder .stop-btn {
-  background-color: #c0392b;
-  color: white;
-}
-
-.audio-recorder p {
-  margin-top: 0.5rem;
-  color: #555;
-  font-size: 1rem;
-}
-
-/* --- Dish Card --- */
 .dish-card {
   position: relative;
-  background-color: #ffffff;
+  background-color: var(--color-bg-dark);
   border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 16px var(--shadow-dark);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-  border-top: 6px solid #e67e22;
+  border-top: 6px solid var(--color-accent-orange);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -165,26 +123,25 @@
 
 .dish-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 10px 22px var(--shadow-dark);
 }
 
 .dish-name {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #d35400;
+  color: var(--color-accent-dark-red);
   margin-bottom: 12px;
   text-align: center;
 }
 
 .dish-reason {
   font-size: 1rem;
-  color: #555;
+  color: var(--color-text-secondary);
   line-height: 1.5;
   text-align: center;
   font-style: italic;
 }
 
-/* --- Diet Badge --- */
 .diet-badge {
   position: absolute;
   top: 12px;
@@ -199,25 +156,17 @@
   opacity: 0.95;
 }
 
-
 /* ====================================================================
    IV. Keyframes / Animations
 ==================================================================== */
-
 @keyframes badgeSpin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
 @keyframes fadeIn {
-  from {
-      opacity: 0;
-      transform: translateY(10px);
-  }
-  to {
-      opacity: 1;
-      transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slide {
