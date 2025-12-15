@@ -1,0 +1,67 @@
+.audio-recorder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 40px 0;
+}
+
+.record-circle {
+  width: 90px;
+  height: 90px;
+  background: #ff4d4d;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.record-circle:hover {
+  transform: scale(1.05);
+}
+
+.record-circle.recording {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.7); }
+  70% { box-shadow: 0 0 0 25px rgba(255, 77, 77, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
+}
+
+/* גלי קול */
+.waves {
+  position: absolute;
+  display: flex;
+  gap: 4px;
+  bottom: -30px;
+}
+
+.waves span {
+  width: 6px;
+  height: 20px;
+  background: #ff4d4d;
+  border-radius: 4px;
+  animation: wave 1.2s infinite ease-in-out;
+}
+
+.waves span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.waves span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes wave {
+  0%, 100% { height: 10px; }
+  50% { height: 30px; }
+}
+
+.loading-text {
+  margin-top: 20px;
+  color: #666;
+}
