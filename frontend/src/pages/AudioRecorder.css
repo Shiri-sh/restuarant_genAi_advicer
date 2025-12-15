@@ -1,68 +1,94 @@
-
 .audio-recorder {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  margin: 40px 0;
+  gap: 12px;
+  padding: 6px 10px;
+  background: #f6f6f6;
+  border-radius: 50px;
+  box-shadow: 0 0 0 1px #ddd inset;
+  width: 100%;
+  max-width: 300px;
 }
 
-.record-circle {
-  width: 30px;
-  height: 30px;
-  background: var(--color-accent-dark-red);
+/* 🎙️ מיקרופון */
+.mic-button {
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
+  border: none;
+  background: #f2f2f2;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 23px;
-  cursor: pointer;
-  position: relative;
-  transition: transform 0.3s ease;
+  flex-shrink: 0; /* חשוב! */
 }
 
-.record-circle:hover {
-  transform: scale(1.05);
+.mic-button:disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 
-.record-circle.recording {
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.7); }
-  70% { box-shadow: 0 0 0 25px rgba(255, 77, 77, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
-}
-
-/* גלי קול */
-.waves {
-  position: absolute;
+/* 🎧 אזור הקלטה מימין */
+.record-bar {
   display: flex;
-  gap: 4px;
-  bottom: -30px;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
 }
 
-.waves span {
-  width: 6px;
-  height: 20px;
-  background: var(--color-accent-dark-red);
-  border-radius: 4px;
-  animation: wave 1.2s infinite ease-in-out;
+/* כפתורים */
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.waves span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.waves span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes wave {
-  0%, 100% { height: 10px; }
-  50% { height: 30px; }
-}
-
-.loading-text {
-  margin-top: 20px;
+.icon-btn.cancel {
+  background: transparent;
   color: #666;
 }
+
+.icon-btn.confirm {
+  background: #b71c1c;
+  color: #fff;
+}
+
+/* 🌊 גלים */
+.waveform {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex: 1;           /* הגלים מתרחבים באמצע */
+  height: 28px;
+}
+
+.wave-bar {
+  width: 4px;
+  background: #b71c1c;
+  border-radius: 2px;
+  transition: height 0.1s ease;
+}
+.loading { 
+    /*margin-top: 20px;*/
+     display: flex; 
+     align-items: center;
+      gap: 10px;
+       color: #555;
+       font-size: 0.95rem; 
+    }
+.spinner {
+     width: 16px;
+    height: 16px;
+    border: 2px solid #ccc;
+    border-top: 2px solid #b71c1c;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  
+  @keyframes spin { to { transform: rotate(360deg); } }
