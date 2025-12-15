@@ -20,7 +20,6 @@
   font-weight: 700;
   color: #d35400; /* warm orange */
   margin-bottom: 1rem;
-  text-align: center;
 }
 
 .home-subtitle {
@@ -29,6 +28,7 @@
   text-align: center;
   max-width: 600px;
   margin-bottom: 2rem;
+  margin: auto;
 }
 
 /* =======================
@@ -174,13 +174,21 @@
   height: 400px;
   overflow: hidden;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  z-index: 0;
+  justify-content: center;
 }
-
-/* כל תמונה בחלון החולף */
+.slider-track {
+  display: flex;
+  width: calc(200%); /* מכפילים את התמונות כדי לגרום ל-loop חלק */
+  animation: slide 20s linear infinite;
+}
+.slider-image {
+  min-width: 33.3333%; /* שלוש תמונות בכל “מסך” */
+  height: 400px;
+  background-size: cover;
+  background-position: center;
+}
+/* כל תמונה */
 .slideshow {
   position: absolute;
   top: 0;
@@ -190,23 +198,33 @@
   background-size: cover;
   background-position: center;
   opacity: 0;
-  animation: fade 20s infinite;
+  animation: fadeContinuous 15s linear infinite;
 }
-
-/* אנימציית fade חלקה */
-@keyframes fade {
-  0%   { opacity: 0; }
-  5%   { opacity: 1; }
-  25%  { opacity: 1; }
-  30%  { opacity: 0; }
+@keyframes slide {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+/* אנימציית fade רציפה */
+@keyframes fadeContinuous {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  40% { opacity: 1; }
+  50% { opacity: 0; }
   100% { opacity: 0; }
 }
 
 /* תוכן מעל הרקע */
 .header-content {
-  position: relative;
+  position: absolute;
   z-index: 2;
   text-align: center;
   color: white;
   text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.header-background::after {
+  content: '';
+  position: absolute;
+  inset: 0; /* top:0; left:0; right:0; bottom:0; */
+  background-color: rgba(255, 255, 255, 0.3); /* שקיפות של 30% */
+  z-index: 1;
 }
