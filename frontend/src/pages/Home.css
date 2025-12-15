@@ -88,12 +88,11 @@
 
 .slider-track {
   display: flex;
-  width: calc(200%); /* מכפילים את התמונות ל-loop חלק */
-  animation: slide 20s linear infinite;
+  width: max-content; /* או פשוט בלי width בכלל */
+  animation: slide 80s linear infinite;
 }
-
 .slider-image {
-  flex: 0 0 33.3333%; /* אם את מצפה ל-3 תמונות “במסך” */
+  width: 33.333vw;/* אם את מצפה ל-3 תמונות “במסך” */
   height: 400px;
   background-size: cover;
   background-position: center;
@@ -161,28 +160,28 @@
   font-style: italic;
 }
 
-.diet-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background-size: cover;
-  background-position: center;
-  animation: badgeSpin 7s linear infinite;
-  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.35));
-  opacity: 0.95;
+
+.bot {
+  width: 23px;
+  height: 25px;
+  margin-left: 8px;
 }
 
+.diet-icon {
+  width: 28px;
+  height: 28px;
+  color: #4caf50; /* טבעוני */
+ }
+.diet-row{
+  display: flex;
+  justify-content: center;
+  margin-left: 5px;
+  /* margin-bottom: 6px; 
+margin-top: 10px; */
+}
 /* ====================================================================
    IV. Keyframes / Animations
 ==================================================================== */
-@keyframes badgeSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
