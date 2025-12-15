@@ -1,128 +1,131 @@
 /* Page container */
 .home-page {
-    min-height: 100vh;
-    background: linear-gradient(to bottom, #fff3e0, #ffe0b2);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #333;
-  }
-  
-  /* Title */
-  .home-title {
-    font-size: 2.8rem;
-    font-weight: 700;
-    color: #d35400; /* warm orange */
-    margin-bottom: 1rem;
-    text-align: center;
-  }
-  
-  /* Subtitle */
-  .home-subtitle {
-    font-size: 1.2rem;
-    color: #555;
-    text-align: center;
-    max-width: 600px;
-    margin-bottom: 2rem;
-  }
-  
-  /* Dishes grid */
-  .dishes-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    width: 100%;
-    max-width: 1100px;
-    margin-top: 2rem;
-  }
-  /* Audio Recorder container */
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #fafafa, #f0f0f0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #2b2b2b;
+}
+
+/* Title – חי ובולט */
+.home-title {
+  font-size: 2.9rem;
+  font-weight: 800;
+  color: #e67e22; /* vibrant orange */
+  margin-bottom: 0.6rem;
+  text-align: center;
+}
+
+/* Subtitle – רגוע */
+.home-subtitle {
+  font-size: 1.15rem;
+  color: #666;
+  text-align: center;
+  max-width: 600px;
+  margin-bottom: 2.2rem;
+}
+
+/* Dishes grid */
+.dishes-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.6rem;
+  width: 100%;
+  max-width: 1100px;
+  margin-top: 2rem;
+}
+
+/* Audio Recorder */
 .audio-recorder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.audio-recorder button {
+  padding: 0.75rem 2.2rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  background-color: #e67e22;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 0.5rem;
+}
+
+.audio-recorder button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.22);
+}
+
+.audio-recorder .stop-btn {
+  background-color: #8c4a2f; /* deep brown */
+}
+
+.audio-recorder p {
+  margin-top: 0.5rem;
+  color: #666;
+  font-size: 1rem;
+}
+
+/* Dish Card */
+.dish-card {
+  background-color: #ffffff;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border-top: 6px solid #e67e22;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.dish-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+/* Dish name – חי אבל נקי */
+.dish-name {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #e67e22;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* Reason – רגוע */
+.dish-reason {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.6;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
-  
-  .audio-recorder button {
-    padding: 0.75rem 2rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    border: none;
-    border-radius: 9999px; /* round buttons */
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease-in-out;
-    margin-bottom: 0.5rem;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .audio-recorder button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .dishes-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
-  
-  .audio-recorder .start-btn {
-    background-color: #e67e22;
-    color: white;
-  }
-  
-  .audio-recorder .stop-btn {
-    background-color: #c0392b;
-    color: white;
-  }
-  
-  .audio-recorder p {
-    margin-top: 0.5rem;
-    color: #555;
-    font-size: 1rem;
-  }
-  .analysis-box {
-    background: #ffffffd8;
-    padding: 20px;
-    margin-top: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-    width: 80%;
-    max-width: 700px;
-    border: 1px solid #ececec;
-    direction: rtl; /* תמיכה בעברית */
-    text-align: right;
-    margin-left: auto;
-    margin-right: auto;
-    animation: fadeIn 0.5s ease;
-  }
-  
-  .analysis-box h2 {
-    margin-top: 0;
-    font-size: 24px;
-    font-weight: 700;
-    color: #222;
-    text-align: center;
-  }
-  
-  .analysis-box p {
-    font-size: 18px;
-    line-height: 1.6;
-    white-space: pre-wrap; /* שומר על פורמט ונקודות */
-    color: #444;
-  }
-  
-  /* אנימציה חלקה */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @media (min-width: 768px) {
-    .dishes-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-  
+}

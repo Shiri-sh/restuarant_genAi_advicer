@@ -25,7 +25,12 @@ export default function AudioRecorder({ onResult }) {
         try{
           const recommendations = await sendAudioToServer(blob); 
           console.log("Server response:", recommendations);
-         onResult(recommendations); 
+          if (Array.isArray(recommendations)) {
+            onResult(recommendations);
+          } else {
+            console.error("Invalid recommendations format:", recommendations);
+            onResult([]);
+          }
           setLoading(false);
         }
        catch (error) {

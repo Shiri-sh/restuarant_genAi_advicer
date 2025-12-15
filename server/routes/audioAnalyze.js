@@ -55,14 +55,19 @@ router.post("/analyze-audio", upload.single("audio"), async (req, res) => {
             model: "gemini-2.5-flash",
             contents: contents,
         });
+        let parsed;
 
-        console.log(result.text);
-        
-        
-        res.json({
-          success: true,
-          analysis: result.text,
-        });
+try {
+  parsed = JSON.parse(result.text);
+} catch (e) {
+  console.error("AI returned invalid JSON:", result.text);
+  return res.status(500).json({ error: "AI response format error" });
+}
+
+res.json({
+  success: true,
+  recommended_dishes: parsed.recommended_dishes
+});
     
     } catch (err) {
         console.error('Full error stack:', err.stack || err, 'code:', err.code || null);
