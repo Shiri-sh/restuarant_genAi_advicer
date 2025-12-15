@@ -1,39 +1,19 @@
-/* =======================
-   Page container
-======================= */
+/* ====================================================================
+   I. Layout & Page Structure
+==================================================================== */
+
+/* --- Page Container --- */
 .home-page {
   min-height: 100vh;
   background: linear-gradient(to bottom, #fff3e0, #ffe0b2);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
 }
 
-/* =======================
- Title & Subtitle
-======================= */
-.home-title {
-  font-size: 3rem; /* שונה לגודל יותר בולט */
-  font-weight: 700;
-  color: #d35400; /* warm orange */
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-.home-subtitle {
-  font-size: 1.5rem; /* שונה קצת יותר גדול */
-  color: #555;
-  text-align: center;
-  max-width: 600px;
-  margin-bottom: 2rem;
-}
-
-/* =======================
- Dishes grid
-======================= */
+/* --- Dishes Grid --- */
 .dishes-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -49,9 +29,85 @@
   }
 }
 
-/* =======================
- Audio Recorder
-======================= */
+/* ====================================================================
+   II. Header & Slideshow
+==================================================================== */
+
+/* --- Header Background + Slideshow Container --- */
+.header-background {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.header-background::after {
+  content: '';
+  position: absolute;
+  inset: 0; /* top:0; left:0; right:0; bottom:0; */
+  background-color: rgba(255, 255, 255, 0.4); /* שקיפות של 30% */
+  z-index: 1;
+}
+
+/* --- Slider Track & Images --- */
+.slider-track {
+  display: flex;
+  width: calc(200%); /* מכפילים את התמונות כדי לגרום ל-loop חלק */
+  animation: slide 20s linear infinite;
+}
+.slider-image {
+  min-width: 33.3333%; /* שלוש תמונות בכל “מסך” */
+  height: 400px;
+  background-size: cover;
+  background-position: center;
+}
+
+/* --- Slideshow (If used for fading instead of sliding) --- */
+.slideshow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  animation: fadeContinuous 15s linear infinite;
+}
+
+/* --- Header Text Content --- */
+.header-content {
+  position: absolute;
+  z-index: 2;
+  text-align: center;
+  color: white;
+  text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+/* --- Title & Subtitle (Inside Header) --- */
+.home-title {
+  font-size: 3rem; /* שונה לגודל יותר בולט */
+  font-weight: 700;
+  color: #d35400; /* warm orange */
+  margin-bottom: 1rem;
+}
+
+.home-subtitle {
+  font-size: 1.5rem; /* שונה קצת יותר גדול */
+  color: #555;
+  text-align: center;
+  max-width: 600px;
+  margin-bottom: 2rem;
+  margin: auto;
+}
+
+/* ====================================================================
+   III. Components
+==================================================================== */
+
+/* --- Audio Recorder Container --- */
 .audio-recorder {
   display: flex;
   flex-direction: column;
@@ -59,6 +115,7 @@
   margin-top: 1rem;
 }
 
+/* --- Audio Recorder Elements --- */
 .audio-recorder button {
   padding: 0.75rem 2rem;
   font-size: 1.1rem;
@@ -92,9 +149,7 @@
   font-size: 1rem;
 }
 
-/* =======================
- Dish Card
-======================= */
+/* --- Dish Card --- */
 .dish-card {
   position: relative;
   background-color: #ffffff;
@@ -129,9 +184,7 @@
   font-style: italic;
 }
 
-/* =======================
- Diet Badge
-======================= */
+/* --- Diet Badge --- */
 .diet-badge {
   position: absolute;
   top: 12px;
@@ -146,14 +199,16 @@
   opacity: 0.95;
 }
 
+
+/* ====================================================================
+   IV. Keyframes / Animations
+==================================================================== */
+
 @keyframes badgeSpin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
-/* =======================
- Fade in animation
-======================= */
 @keyframes fadeIn {
   from {
       opacity: 0;
@@ -165,48 +220,15 @@
   }
 }
 
-/* =======================
- Header background + slideshow
-======================= */
-.header-background {
-  position: relative;
-  width: 100%;
-  height: 400px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 0;
+@keyframes slide {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
-/* כל תמונה בחלון החולף */
-.slideshow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  opacity: 0;
-  animation: fade 20s infinite;
-}
-
-/* אנימציית fade חלקה */
-@keyframes fade {
-  0%   { opacity: 0; }
-  5%   { opacity: 1; }
-  25%  { opacity: 1; }
-  30%  { opacity: 0; }
+@keyframes fadeContinuous {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  40% { opacity: 1; }
+  50% { opacity: 0; }
   100% { opacity: 0; }
-}
-
-/* תוכן מעל הרקע */
-.header-content {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  color: white;
-  text-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
