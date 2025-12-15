@@ -17,11 +17,11 @@ export default function Home() {
       <AudioRecorder onResult={setDishes} />
 
       <div className="dishes-grid">
-  {Array.isArray(dishes) &&
-    dishes.map((dish, index) => (
-      <DishCard key={index} dish={dish} />
-    ))}
-</div>
+      {Array.isArray(dishes) &&
+        dishes.map((dish, index) => (
+          <DishCard key={index} dish={dish} />
+        ))}
+    </div>
     </div>
   );
 }

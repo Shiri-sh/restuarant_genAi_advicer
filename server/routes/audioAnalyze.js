@@ -45,7 +45,17 @@ router.post("/analyze-audio", upload.single("audio"), async (req, res) => {
         const dishes = await getDishes();
 
         const dishesInfo = dishes.map(dish => {
-            return `Name: ${dish.name}, Ingredients: ${dish.ingredients}, Price: ${dish.price}, Category ID: ${dish.category_id}, Is Vegan: ${dish.is_vegan}, Is Vegetarian: ${dish.is_vegetarian}, On Sale: ${dish.on_sale}, Sale Price: ${dish.sale_price}`;
+            return `name: ${dish.name},
+             ingredients: ${dish.ingredients}, 
+             price: ${dish.price},
+             image_url: ${dish.image_url},
+             category_id: ${dish.category_id},
+             is_vegan: ${dish.is_vegan},
+             is_vegetarian: ${dish.is_vegetarian},
+             on_sale: ${dish.on_sale},
+             sale_price: ${dish.sale_price},
+             created_at: ${dish.created_at},`;
+             
         }).join("\n");
         console.log("dishInfo", dishesInfo);
 
@@ -57,25 +67,24 @@ router.post("/analyze-audio", upload.single("audio"), async (req, res) => {
         });
         let parsed;
 
-try {
-  parsed = JSON.parse(result.text);
-} catch (e) {
-  console.error("AI returned invalid JSON:", result.text);
-  return res.status(500).json({ error: "AI response format error" });
-}
+        try {
+          parsed = JSON.parse(result.text);
+        } catch (e) {
+          console.error("AI returned invalid JSON:", result.text);
+          return res.status(500).json({ error: "AI response format error" });
+        }
 
-res.json({
-  success: true,
-  recommended_dishes: parsed.recommended_dishes
-});
-    
-    } catch (err) {
-        console.error('Full error stack:', err.stack || err, 'code:', err.code || null);
-        if (originalFilePath && fs.existsSync(originalFilePath)) fs.unlinkSync(originalFilePath);
-        if (convertedFilePath && fs.existsSync(convertedFilePath)) fs.unlinkSync(convertedFilePath);
-    
-        res.status(500).json({ error: "Server error during analysis or conversion" });
-    }
+        res.json({
+          success: true,
+          recommended_dishes: parsed.recommended_dishes
+        });
+      } catch (err) {
+            console.error('Full error stack:', err.stack || err, 'code:', err.code || null);
+            if (originalFilePath && fs.existsSync(originalFilePath)) fs.unlinkSync(originalFilePath);
+            if (convertedFilePath && fs.existsSync(convertedFilePath)) fs.unlinkSync(convertedFilePath);
+        
+            res.status(500).json({ error: "Server error during analysis or conversion" });
+        }
 });
 
 export default router;

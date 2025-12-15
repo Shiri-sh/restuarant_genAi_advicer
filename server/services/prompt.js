@@ -39,7 +39,7 @@ Your task:
 - Analyze the customer's speech for preferences, explicit requests, mood, tone, and any hints about what they want.
 - Select the dish or dishes from the database that best match the customer’s desires.
 - For each recommended dish, provide:
-    - The exact dish name (matching the database entry, for easy retrieval)
+    - The exact dish details (matching the database entry, for easy retrieval)
     - A clear reason why this dish suits the customer, based on their speech, mood, and preferences
 - Output the result in clean JSON, using only the following structure:
 
@@ -47,6 +47,13 @@ Your task:
   "recommended_dishes": [
     {
       "name": "Exact name of the dish from the database",
+      "price":"Exact price of the dish from the database",
+      "image_url":"Exact image_url of the dish from the database",
+      "ingredients":"Exact ingredients of the dish from the database",
+      "on_sale":"Exact on_sale of the dish from the database",
+      "sale_price":"Exact sale_price of the dish from the database",
+      "is_vegan":"Exact is_vegan of the dish from the database",
+      "is_vegetarian":"Exact is_vegetarian of the dish from the database",
       "reason": "Short, clear explanation why this dish is recommended"
     }
   ]

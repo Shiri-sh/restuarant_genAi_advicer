@@ -2,7 +2,7 @@ import con from "../db.js";
 
 const getDishes = async () => {
   try {
-    const sql = "SELECT name, price, ingredients, category_id, is_vegan, is_vegetarian, on_sale, sale_price FROM dishes WHERE in_stock = 1";
+    const sql = "SELECT * FROM dishes WHERE in_stock = 1";
     const [rows] = await con.query(sql);
     return rows;
   } catch (err) {
