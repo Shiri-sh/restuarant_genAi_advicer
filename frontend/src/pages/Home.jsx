@@ -1,4 +1,3 @@
-import React from "react";
 import AudioRecorder from "../components/AudioRecorder";
 import DishCard from "../components/DishCard";
 import { useState } from "react";

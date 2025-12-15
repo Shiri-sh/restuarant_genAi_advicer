@@ -1,3 +1,4 @@
+
 .audio-recorder {
   display: flex;
   flex-direction: column;
@@ -8,7 +9,7 @@
 .record-circle {
   width: 30px;
   height: 30px;
-  background: #ff4d4d;
+  background: var(--color-accent-dark-red);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -44,7 +45,7 @@
 .waves span {
   width: 6px;
   height: 20px;
-  background: #ff4d4d;
+  background: var(--color-accent-dark-red);
   border-radius: 4px;
   animation: wave 1.2s infinite ease-in-out;
 }
