@@ -57,7 +57,6 @@ router.post("/analyze-audio", upload.single("audio"), async (req, res) => {
              created_at: ${dish.created_at},`;
              
         }).join("\n");
-        console.log("dishInfo", dishesInfo);
 
         const contents = [{ text: prompt },{ text: dishesInfo }, audioPart];
     

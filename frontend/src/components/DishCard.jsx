@@ -4,7 +4,7 @@ export default function DishCard({ dish }) {
 
   return (
     <div className="dish-card">
-      <img src={dish.image_url} alt={dish.name} className="dish-image" />
+      <img src={`http://localhost:5000${dish.image_url}`} alt={dish.name} className="dish-image" />
       <h2 className="dish-name">{dish.name}</h2>
       <p className="dish-price">Price: ${dish.price}</p>
       <p className="dish-ingredients">Ingredients: {dish.ingredients}</p>
