@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import audioAnalyzeRouter from "./routes/audioAnalyze.js";
+import audioAnalyzeRouter from "./routes/audioAnalyzeRoute.js";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";

@@ -1,26 +1,16 @@
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
-import express from "express";
 import fs from "fs";
 import dotenv from "dotenv";
 import path from "path"; 
 import prompt from "../services/prompt.js";
-import multer from "multer";
-import { storage } from "../services/storage.js";
 import {GoogleGenAI} from '@google/genai';
 import { convertToMp3, fileToGenerativePart } from "../services/fileActions.js";
 import {getDishes} from "../models/dishesModel.js";
 
 dotenv.config();
-
-const router = express.Router();
-
-const upload = multer({ storage });
-
 const ai = new GoogleGenAI({ apiKey: process.env.GENAI_API_KEY });
-
-router.post("/analyze-audio", upload.single("audio"), async (req, res) => {
+const analyzeAudio =  async (req, res) => {
     
     let convertedFilePath = null;
     const originalFilePath = req.file ? req.file.path : null;
@@ -84,6 +74,7 @@ router.post("/analyze-audio", upload.single("audio"), async (req, res) => {
         
             res.status(500).json({ error: "Server error during analysis or conversion" });
         }
-});
 
-export default router;
+    }
+
+export default analyzeAudio
