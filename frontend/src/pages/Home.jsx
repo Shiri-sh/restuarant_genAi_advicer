@@ -19,8 +19,13 @@ export default function Home() {
             ></div>
           ))}
         </div>
-
         <div className="header-content">
+          {/* <img src="/images/logo_white.png"  alt="logo"/>
+          <img src="/images/tamara_logo_english_white.png"  className="logo" alt="logo"/> */}
+           <div className="brand">
+            <h3 className="brand-name">TAMARA</h3>
+            <span className="brand-subtitle">cafe & restaurant</span>
+          </div>
           <h1 className="home-title">The Restaurant that Understands You</h1>
           <p className="home-subtitle">
             Speak your cravings and get smart dish recommendations instantly!

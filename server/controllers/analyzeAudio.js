@@ -7,6 +7,7 @@ import prompt from "../services/prompt.js";
 import {GoogleGenAI} from '@google/genai';
 import { convertToMp3, fileToGenerativePart } from "../services/fileActions.js";
 import {getDishes} from "../models/dishesModel.js";
+import { organizeDBOutput } from "../services/orgenizeDBOutput.js";
 
 dotenv.config();
 const ai = new GoogleGenAI({ apiKey: process.env.GENAI_API_KEY });
@@ -16,14 +17,10 @@ const analyzeAudio =  async (req, res) => {
     const originalFilePath = req.file ? req.file.path : null;
     
     try {
-        console.log("--- Request Received ---");
-        
         if (!req.file) {
             console.error("Multer failed to provide req.file. Check client FormData and field name.");
             return res.status(400).json({ error: "Audio file is required or upload failed." });
         }
-
-        console.log(`File uploaded successfully to: ${originalFilePath}`);
 
         const originalDir = path.dirname(originalFilePath);
         const originalName = path.basename(originalFilePath, path.extname(originalFilePath));
@@ -34,19 +31,7 @@ const analyzeAudio =  async (req, res) => {
         const audioPart = fileToGenerativePart(convertedFilePath, "audio/mp3"); 
         const dishes = await getDishes();
 
-        const dishesInfo = dishes.map(dish => {
-            return `name: ${dish.name},
-             ingredients: ${dish.ingredients}, 
-             price: ${dish.price},
-             image_url: ${dish.image_url},
-             category_id: ${dish.category_id},
-             is_vegan: ${dish.is_vegan},
-             is_vegetarian: ${dish.is_vegetarian},
-             on_sale: ${dish.on_sale},
-             sale_price: ${dish.sale_price},
-             created_at: ${dish.created_at},`;
-             
-        }).join("\n");
+        const dishesInfo = organizeDBOutput(dishes);
 
         const contents = [{ text: prompt },{ text: dishesInfo }, audioPart];
     
@@ -67,6 +52,7 @@ const analyzeAudio =  async (req, res) => {
           success: true,
           recommended_dishes: parsed.recommended_dishes
         });
+        
       } catch (err) {
             console.error('Full error stack:', err.stack || err, 'code:', err.code || null);
             if (originalFilePath && fs.existsSync(originalFilePath)) fs.unlinkSync(originalFilePath);

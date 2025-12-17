@@ -1,7 +1,6 @@
 import { Salad, Vegan, Bot } from 'lucide-react';
+import "../css/DishCard.css";
 export default function DishCard({ dish }) {
-  const veganBadge = "/images/vegan-badge.png";
-  const vegetarianBadge = "/images/vegetarian-badge.jpg";
 
   return (
     <div className="dish-card">
