@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { sendAudioToServer } from "../services/api";
-import "../pages/AudioRecorder.css";
+import "../css/AudioRecorder.css";
 import { Mic, Check, X } from "lucide-react";
 
 export default function AudioRecorder({ onResult }) {

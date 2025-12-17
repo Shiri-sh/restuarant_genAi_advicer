@@ -2,7 +2,7 @@ import AudioRecorder from "../components/AudioRecorder";
 import DishCard from "../components/DishCard";
 import { useState } from "react";
 import imageUrls  from "../services/dishesImagesUrls";
-import "./Home.css";
+import "../css/Home.css";
 
 export default function Home() {
   const [dishes, setDishes] = useState([]);
