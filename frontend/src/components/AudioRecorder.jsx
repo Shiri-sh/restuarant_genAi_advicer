@@ -9,12 +9,12 @@ export default function AudioRecorder({ onResult }) {
 
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
-
+  const shouldSendRef = useRef(false);
   const analyserRef = useRef(null);
   const audioContextRef = useRef(null);
   const animationRef = useRef(null);
 
-  const BARS = 10;
+  const BARS = 14;
   const [levels, setLevels] = useState(Array(BARS).fill(6));
 
   const startRecording = async () => {
@@ -30,7 +30,11 @@ export default function AudioRecorder({ onResult }) {
       };
 
       mediaRecorder.onstop = async () => {
-        console.log("chunksRef.current:", chunksRef.current);
+        if (!shouldSendRef.current) {
+          chunksRef.current = [];
+          return;
+        }
+
         if (chunksRef.current.length === 0) return;
 
         setLoading(true);
@@ -48,7 +52,7 @@ export default function AudioRecorder({ onResult }) {
         }
         setLoading(false);
       };
-
+      shouldSendRef.current = true;
       mediaRecorder.start();
       setIsRecording(true);
 
@@ -78,7 +82,8 @@ export default function AudioRecorder({ onResult }) {
     audioContextRef.current?.close();
   };
   const cancelRecording = () => {
-    chunksRef.current=[];
+    shouldSendRef.current = false;
+
     mediaRecorderRef.current.stop();
     setIsRecording(false);
 
@@ -100,7 +105,7 @@ export default function AudioRecorder({ onResult }) {
       const avg = chunk.reduce((a, b) => a + b, 0) / chunk.length;
 
       //sensitivity adjustment
-      return Math.min(40, avg * 1.5 + 6);
+      return Math.min(40, avg * 0.6 + 6);
     });
 
     setLevels(newLevels);
@@ -109,11 +114,10 @@ export default function AudioRecorder({ onResult }) {
 
   return (
   <div className="audio-recorder">
-    {/* מיקרופון – תמיד משמאל */}
     <button
       className="mic-button"
       onClick={!isRecording ? startRecording : undefined}
-      disabled={isRecording}
+      disabled={loading || isRecording}
     >
       <Mic size={22} />
     </button>
@@ -122,7 +126,6 @@ export default function AudioRecorder({ onResult }) {
     {isRecording && (
       <div className="record-bar">
         
-
         <div className="waveform">
           {levels.map((lvl, i) => (
             <div

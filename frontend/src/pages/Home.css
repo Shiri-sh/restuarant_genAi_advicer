@@ -83,16 +83,16 @@
   position: relative;
   width: 100%;
   height: 400px;
-  overflow: hidden; /* חשוב */
+  overflow: hidden; 
 }
 
 .slider-track {
   display: flex;
-  width: max-content; /* או פשוט בלי width בכלל */
-  animation: slide 80s linear infinite;
+  width: max-content; 
+  animation: slide 100s linear infinite;
 }
 .slider-image {
-  width: 33.333vw;/* אם את מצפה ל-3 תמונות “במסך” */
+  width: 33.333vw;
   height: 400px;
   background-size: cover;
   background-position: center;
