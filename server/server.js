@@ -15,6 +15,7 @@ app.use(express.json());
 
 app.use("/api", audioAnalyzeRouter);
 app.use("/images", express.static(path.join(__dirname, "images")));
+
 const PORT = 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${process.env.PORT }`);

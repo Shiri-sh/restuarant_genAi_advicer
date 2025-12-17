@@ -12,4 +12,5 @@ const router = express.Router();
 const upload = multer({ storage });
 
 router.post("/analyze-audio", upload.single("audio"),analyzeAudio );
+
 export default router;
