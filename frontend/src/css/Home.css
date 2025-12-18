@@ -3,32 +3,50 @@
 ==================================================================== */
 :root {
   /* Base Colors */
-  --color-bg-light: #d8d5d5;       /* אפור בהיר לרקע */
-  --color-bg-white: #ffffff;        /* לבן */
-  --color-text-primary: #333333;   /* טקסט ראשי אפור כהה */
-  --color-text-secondary: #232323; /* טקסט משני */
+  --color-bg-light: #FAFAFA;
+  --color-bg-dark: #2C2C2C;
+  --color-bg-white: #FFFFFF;
+  --color-text-primary: #333333;
+  --color-text-secondary: #666666;
   
   /* Accent Colors */
-  --color-accent-orange: #e67e22;
-  --color-accent-red: #ffb9b2;
-  --color-accent-dark-red: #ee2d2d;
+  --color-accent-primary: #E8505B;    /* אדום-ורוד עיקרי */
+  --color-accent-light: #FFB9B2;      /* ורוד בהיר */
+  --color-accent-dark: #C7455C;       /* אדום כהה */
+  
+  /* Neutrals */
+  --color-gray-100: #F5F5F5;
+  --color-gray-200: #E0E0E0;
+  --color-gray-300: #BDBDBD;
+  --color-gray-800: #424242;
   
   /* Shadows */
-  --shadow-light: rgba(0, 0, 0, 0.1);
-  --shadow-medium: rgba(0, 0, 0, 0.15);
-  --shadow-dark: rgba(0, 0, 0, 0.80);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.15);
+  --shadow-text: 2px 2px 12px rgba(0, 0, 0, 0.4);
 }
 
 /* ====================================================================
    I. Layout & Page Structure
 ==================================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .home-page {
   min-height: 100vh;
-  background: linear-gradient(to bottom, var(--color-bg-light), var(--color-bg-dark));
+  background: linear-gradient(to bottom, var(--color-bg-light), var(--color-gray-100));
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 
+               'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 
+               sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   color: var(--color-text-primary);
 }
 
@@ -36,15 +54,23 @@
 .dishes-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: 2rem;
   width: 100%;
-  max-width: 1100px;
-  margin-top: 2rem;
+  max-width: 1200px;
+  padding: 3rem 1.5rem;
+  margin: 0 auto;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
+  .dishes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
   .dishes-grid {
     grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
   }
 }
 
@@ -54,118 +80,217 @@
 .header-background {
   position: relative;
   width: 100%;
-  height: 400px;
+  height: 75vh;
+  min-height: 500px;
+  max-height: 700px;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
+/* Overlay מודרני עם גרדיאנט */
 .header-background::after {
   content: '';
   position: absolute;
   inset: 0;
-  background-color: rgba(54, 52, 52, 0.4);
+  background: linear-gradient(
+    135deg,
+    rgba(44, 44, 44, 0.7) 0%,
+    rgba(44, 44, 44, 0.4) 50%,
+    rgba(232, 80, 91, 0.2) 100%
+  );
   z-index: 1;
 }
 
-.slideshow {
+.slider-track {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
+  display: flex;
+  width: max-content;
+  height: 100%;
+  animation: slide 100s linear infinite;
+}
+
+.slider-image {
+  width: 33.333vw;
+  min-width: 400px;
   height: 100%;
   background-size: cover;
   background-position: center;
-  opacity: 0;
-  animation: fadeContinuous 15s linear infinite;
-}
-.header-background {
-  position: relative;
-  width: 100%;
-  height: 400px;
-  overflow: hidden; 
+  filter: brightness(0.9);
+  transition: filter 0.3s ease;
 }
 
-.slider-track {
-  display: flex;
-  width: max-content; 
-  animation: slide 100s linear infinite;
-}
-.slider-image {
-  width: 33.333vw;
-  height: 400px;
-  background-size: cover;
-  background-position: center;
-}
-
+/* Content Over Slider */
 .header-content {
-  position: absolute;
+  position: relative;
   z-index: 2;
   text-align: center;
-  color: var(--color-bg-dark);
-  text-shadow: 0 6px 10px rgba(0,0,0,0.8);
+  color: var(--color-bg-white);
+  max-width: 900px;
+  padding: 0 2rem;
+  animation: fadeInUp 1s ease-out;
 }
+
+/* Brand Section */
 .brand {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .brand-name {
-  font-size: 3.2rem;          /* גדול ובולט */
-  font-weight: 700;
-  letter-spacing: 0.15em;     /* לוק יוקרתי */
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 300;
+  letter-spacing: 0.25em;
   margin: 0;
-  color: var(--color-accent-red);             /* אדום־חום */
+  color: var(--color-bg-white);
+  text-shadow: var(--shadow-text);
+  font-family: 'Playfair Display', Georgia, serif;
+  position: relative;
+  display: inline-block;
+}
+
+.brand-name::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: var(--color-accent-primary);
+  box-shadow: 0 0 10px var(--color-accent-primary);
 }
 
 .brand-subtitle {
-  display: block;             /* חשוב! */
-  margin-top: 0.2rem;
-  font-size: 0.9rem;
-  letter-spacing: 0.3em;
+  display: block;
+  margin-top: 1.2rem;
+  font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+  letter-spacing: 0.4em;
   text-transform: uppercase;
-  color: #555;
+  color: var(--color-accent-light);
+  font-weight: 300;
+  text-shadow: var(--shadow-text);
 }
+
+/* Main Title */
 .home-title {
-  font-size: 3rem;
-  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 600;
   color: var(--color-bg-white);
-  margin-bottom: 0.2rem;
-  margin-top: 0;
+  margin: 2rem 0 1rem;
+  line-height: 1.2;
+  text-shadow: var(--shadow-text);
+  letter-spacing: 0.02em;
 }
 
 .home-subtitle {
-  font-size: 1.5rem;
-  color: var(--color-accent-red);
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  color: var(--color-gray-100);
   text-align: center;
-  max-width: 1000px;
-  margin-bottom: 2rem;
-  margin-top: 0;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+  font-weight: 300;
+  text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.5);
 }
+
+/* ====================================================================
+   III. Dish Cards (אם תרצי להוסיף סטיילים לכרטיסיות)
+==================================================================== */
 .dish-image {
-  width: 100%;         /* התמונה תתפרס לכל רוחב הכרטיס */
-  height: 270px;       /* גובה קבוע כדי שכל התמונות יהיו זהות */
-  object-fit: cover;   /* חיתוך חכם כדי לשמור על פרופורציות */
-  border-radius: 5px; /* אפשרי: פינות מעוגלות כמו בכרטיס */
-  margin-bottom: 1px; /* רווח בין התמונה לשאר התוכן */
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 12px 12px 0 0;
+  transition: transform 0.4s ease;
+}
+
+.dish-card:hover .dish-image {
+  transform: scale(1.05);
 }
 
 /* ====================================================================
    IV. Keyframes / Animations
 ==================================================================== */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slide {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes fadeContinuous {
-  0% { opacity: 0; }
-  10% { opacity: 1; }
-  40% { opacity: 1; }
+  0%, 100% { opacity: 0; }
+  10%, 40% { opacity: 1; }
   50% { opacity: 0; }
-  100% { opacity: 0; }
+}
+
+/* ====================================================================
+   V. Responsive Design
+==================================================================== */
+@media (max-width: 768px) {
+  .header-background {
+    height: 60vh;
+    min-height: 450px;
+  }
+  
+  .brand-name::after {
+    width: 40px;
+  }
+  
+  .slider-image {
+    min-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-content {
+    padding: 0 1rem;
+  }
+  
+  .brand-name {
+    letter-spacing: 0.15em;
+  }
+  
+  .brand-subtitle {
+    letter-spacing: 0.3em;
+  }
+}
+
+/* ====================================================================
+   VI. Accessibility & Performance
+==================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .slider-track {
+    animation-duration: 200s;
+  }
+  
+  .header-content {
+    animation: none;
+  }
+  
+  .dish-image {
+    transition: none;
+  }
+}
+
+/* Focus States */
+*:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 3px;
 }
