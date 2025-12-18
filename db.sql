@@ -57,14 +57,41 @@ INSERT INTO dishes (
     name, price, image_url, ingredients, category_id,
     is_vegan, is_vegetarian, in_stock, on_sale, sale_price
 ) VALUES
+--focaccias
+('Coal focaccia', 64.00, '/images/dishes/coal_focaccia.png',
+ 'Grilled eggplant, placed on crispy focaccia with a drizzle of millstone-ground tahini, date syrup, feta cheese shavings, and basil.', 
+ 4, FALSE, TRUE, TRUE, TRUE, 58.00),
+ --Sandwiches
+ ('Smoked salmon sandwich', 62.00, '/images/dishes/smoked_salmon_sandwich.png',
+ 'Cream cheese, smoked salmon, red onion, lettuce and tomato slices.', 
+ 5, FALSE, FALSE, TRUE, FALSE, NULL),
+ ('Dream sandwich', 59.00, '/images/dishes/dream_sandwich.png',
+ 'Basil pesto, lettuce, cream cheese, tomato slices, and burnt halloumi cheese.',
+ 5, FALSE, TRUE, TRUE, FALSE, NULL),
+ ('Tunisian sandwich', 59.00, '/images/dishes/tunisian_sandwich.png',
+ 'Harissa aioli, pickled lemon, hot hard-boiled egg, hot sliced ​​potato, tuna and pickled cucumber.',
+ 5, TRUE, TRUE, TRUE, TRUE, 50.00),
+ ('Omelet sandwich', 49.00, '/images/dishes/omelet_sandwich.png',
+ 'Cream cheese, vegetable omelet, lettuce, cucumber and tomato slices.',
+ 5, FALSE, TRUE, TRUE, FALSE, NULL),
+ --Fish
+ ('Sea morals', 134.00, '/images/dishes/sea_morals.png',
+ 'Served with green mashed potatoes, green beans, broccoli florets and red wine sauce.',
+ 10, FALSE, FALSE, TRUE, FALSE, NULL),
+  ('FISH & CHIPS', 89.00, '/images/dishes/fish_and_chips.png',
+ 'Cod fish pieces coated in panko crumbs, on a bed of crispy steak fries, served with amba aioli.',
+ 10, FALSE, FALSE, TRUE, TRUE, 79.00),
+  ('Japanese sea bass', 49.00, '/images/dishes/japanese_sea_bass.png',
+ 'A meaty whole fish, grilled, with the aroma of garlic and olive oil, accompanied by oven-roasted root vegetables and sauce...',
+ 10, FALSE, FALSE, TRUE, FALSE, NULL);
+
+-- Starters
 ('Chips', 32.00, NULL,
  'Crispy potato sticks', 
  1, FALSE, TRUE, TRUE, FALSE, NULL),
-
 ('Soup of the day', 39.00, NULL,
  'With a warm bun and butter.',
  1, FALSE, TRUE, TRUE, FALSE, NULL),
-
 ('Dreamy skewers', 52.00, NULL,
  'Crispy fingers of halloumi cheese, drizzled with teriyaki sauce.',
  1, FALSE, TRUE, TRUE, FALSE, NULL),
@@ -73,7 +100,6 @@ INSERT INTO dishes (
 ('Tamara Double Morning', 152.00, NULL,
  'Omelette of choice: Spanish omelette with garlic, tomatoes, a little spicy / Forest omelette with wild mushrooms and green onions...',
  2, FALSE, TRUE, TRUE, TRUE, 150.00),
-
 ('Spicy tomato shakshuka', 69.00, NULL,
  'Served with Moroccan farina, house dips and coffee or natural juice.',
  2, FALSE, TRUE, TRUE, FALSE, NULL),
@@ -81,12 +107,10 @@ INSERT INTO dishes (
 -- Toasts
 ('Smoked salmon toast', 62.00, NULL,
  'Crispy bagel with cream cheese, mozzarella, red onion and smoked salmon.',
- 3, FALSE, TRUE, TRUE, FALSE, NULL),
-
+ 3, FALSE, FALSE, TRUE, FALSE, NULL),
 ('Tamara Toast', 59.00, NULL,
  'Crispy bagel with cream cheese, tomato basil sauce, olives and mozzarella cheese.',
  3, FALSE, TRUE, TRUE, FALSE, NULL),
-
 ('Cheesy toast', 62.00, NULL,
  'Crispy sesame bagel with cream cheese, pesto, red onion, hard-boiled egg and olives.',
  3, FALSE, TRUE, TRUE, FALSE, NULL),
@@ -95,7 +119,6 @@ INSERT INTO dishes (
 ('Creamy salmon fettuccine', 82.00, NULL,
  'Salmon cubes, sautéed mushrooms, cream sauce and Parmesan.',
  6, FALSE, FALSE, TRUE, TRUE, 80.00),
-
 ('Penna Wild Mushroom Cream', 66.00, NULL,
  'Mushrooms, garlic, chard, Parmesan cream and a touch of wine.',
  6, FALSE, TRUE, TRUE, FALSE, NULL),
@@ -103,17 +126,15 @@ INSERT INTO dishes (
 -- Desserts
 ('Lemon pistachio bar', 53.00, NULL,
  'Crunchy pistachio base, lemon cream, pistachio topping and Chantilly.',
- 10, FALSE, TRUE, TRUE, FALSE, NULL),
-
+ 11, FALSE, TRUE, TRUE, FALSE, NULL),
 ('New York cheesecake', 53.00, NULL,
  'Homemade cheesecake with vanilla cream.',
- 10, FALSE, TRUE, TRUE, FALSE, NULL),
+ 11, FALSE, TRUE, TRUE, FALSE, NULL),
 
 -- Pizzas
 ('Pizza Emilia', 59.00, NULL,
  'Tomato basil sauce, mozzarella, egg, rocket leaves and olive oil.',
  7, FALSE, TRUE, TRUE, FALSE, NULL),
-
 ('Goat pizza', 59.00, NULL,
  'Tomato sauce, mozzarella, basil pesto and goat cheese rings.',
  7, FALSE, TRUE, FALSE, FALSE, NULL),
@@ -122,7 +143,6 @@ INSERT INTO dishes (
 ('Sweet potato and walnut salad', 67.00, NULL,
  'Lettuce mix, vinaigrette, tomatoes, cucumbers, walnuts, feta and sweet potato fries.',
  8, FALSE, TRUE, TRUE, TRUE, 60.00),
-
 ('Greek Piraeus Salad', 59.00, NULL,
  'Lettuce mix, zaatar, olive oil, cherry tomatoes, cucumbers, olives and red onion.',
  8, TRUE, TRUE, TRUE, FALSE, NULL);
