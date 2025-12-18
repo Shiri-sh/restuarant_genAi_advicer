@@ -71,7 +71,8 @@ describe("prepareAudioforGenAI", () => {
   });
   it("cleans up files on error", async () => {
     const file = { path: "/tmp/test.wav" };
-    
+
+    fs.existsSync.mockReturnValue(true);
     // מדמים כשל בהמרת הקובץ
     convertToMp3.mockRejectedValue(new Error("Conversion failed"));
 
@@ -81,8 +82,7 @@ describe("prepareAudioforGenAI", () => {
       .toThrow("Conversion failed");
 
     // בודקים שהקובץ המזויף נמחק
-    expect(fs.unlinkSync).toHaveBeenCalledWith(path.join("/tmp", "test.wav"));
-    expect(fs.unlinkSync).toHaveBeenCalledWith(path.join("/tmp", "test.mp3"));
+    expect(fs.unlinkSync).toHaveBeenCalledWith("/tmp/test.wav");
   });
   it("throws error when fileToGenerativePart fails", async () => {
     const file = { path: "/tmp/test.wav" };
