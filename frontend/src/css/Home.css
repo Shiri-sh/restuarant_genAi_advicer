@@ -5,7 +5,7 @@
   /* Base Colors */
   --color-bg-light: #FAFAFA;
   --color-bg-dark: #2C2C2C;
-  --color-bg-white: #FFFFFF;
+  --color-bg-white: #cd3636;
   --color-text-primary: #333333;
   --color-text-secondary: #666666;
   
@@ -110,7 +110,7 @@
   display: flex;
   width: max-content;
   height: 100%;
-  animation: slide 100s linear infinite;
+  animation: slide 150s linear infinite;
 }
 
 .slider-image {

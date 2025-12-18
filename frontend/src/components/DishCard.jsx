@@ -3,12 +3,11 @@ import "../css/DishCard.css";
 
 export default function DishCard({ dish }) {
   // חישוב החיסכון
-  const savings = dish.on_sale ? (dish.price - dish.sale_price).toFixed(2) : 0;
+  //const savings = dish.on_sale ? (dish.price - dish.sale_price).toFixed(2) : 0;
   const savingsPercent = dish.on_sale ? Math.round(((dish.price - dish.sale_price) / dish.price) * 100) : 0;
 
   return (
     <div className="dish-card">
-      {/* Image Container with Badges */}
       <div className="dish-image-container">
         <img 
           src={`http://localhost:5000${dish.image_url}`} 
@@ -16,7 +15,6 @@ export default function DishCard({ dish }) {
           className="dish-image" 
         />
         
-        {/* Diet Badge - מדבקה בפינה */}
         {(dish.is_vegan || dish.is_vegetarian) && (
           <div className={`diet-badge ${dish.is_vegan ? 'vegan' : 'vegetarian'}`}>
             {dish.is_vegan ? (
@@ -27,7 +25,6 @@ export default function DishCard({ dish }) {
           </div>
         )}
         
-        {/* Sale Badge */}
         {dish.on_sale && dish.sale_price &&(
           <div className="sale-badge">
             SALE {savingsPercent}% OFF
@@ -35,11 +32,9 @@ export default function DishCard({ dish }) {
         )}
       </div>
 
-      {/* Card Content */}
       <div className="dish-content">
         <h2 className="dish-name">{dish.name}</h2>
         
-        {/* Price Section */}
         <div className="price-section">
           <span className={`original-price ${dish.on_sale ? 'strikethrough' : ''}`}>
             {dish.price}₪
@@ -48,25 +43,22 @@ export default function DishCard({ dish }) {
           {dish.on_sale && dish.sale_price &&(
             <>
               <span className="sale-price">{dish.sale_price}₪</span>
-              <span className="sale-savings">Save {savings}₪</span>
+              {/* <span className="sale-savings">Save {savings}₪</span> */}
             </>
           )}
         </div>
         
-        {/* Info Grid */}
         <div className="dish-info">
           <span className="info-label">Ingredients:</span>
           <span className="info-value">{dish.ingredients}</span>
         </div>
 
-        {/* Description */}
         {dish.description && (
           <p className="info-value" style={{margin: 0, lineHeight: 1.6}}>
             {dish.description}
           </p>
         )}
 
-        {/* AI Recommendation */}
         <div className="ai-recommendation">
           <div className="ai-header">
             <Bot className="ai-icon" strokeWidth={2} />
