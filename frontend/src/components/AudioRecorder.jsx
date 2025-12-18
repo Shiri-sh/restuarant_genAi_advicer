@@ -48,6 +48,7 @@ export default function AudioRecorder({ onResult }) {
             onResult([]);
           }
         } catch (err) {
+          alert(err.error || "Error sending audio to server.");
           console.error(err);
         }
         setLoading(false);
