@@ -1,4 +1,4 @@
-import { sendAudioToServer } from "./sendAudioToServer";
+import { sendAudioToServer } from "../services/api";
 
 //גרסה-מזויפת-לFETCH
 global.fetch = jest.fn();

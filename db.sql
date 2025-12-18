@@ -86,13 +86,13 @@ INSERT INTO dishes (
  10, FALSE, FALSE, TRUE, FALSE, NULL);
 
 -- Starters
-('Chips', 32.00, NULL,
+('Chips', 32.00, '/images/dishes/chips.png',
  'Crispy potato sticks', 
  1, FALSE, TRUE, TRUE, FALSE, NULL),
-('Soup of the day', 39.00, NULL,
+('Soup of the day', 39.00, '/images/dishes/soup_of_the_day.png',
  'With a warm bun and butter.',
  1, FALSE, TRUE, TRUE, FALSE, NULL),
-('Dreamy skewers', 52.00, NULL,
+('Dreamy skewers', 52.00, '/images/dishes/dreamy_skewers.png',
  'Crispy fingers of halloumi cheese, drizzled with teriyaki sauce.',
  1, FALSE, TRUE, TRUE, FALSE, NULL),
 
