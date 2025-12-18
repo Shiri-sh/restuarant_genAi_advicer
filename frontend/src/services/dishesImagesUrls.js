@@ -12,8 +12,6 @@ const imageUrls = [
     "http://localhost:5000/images/dishes/soup_of_the_day.png",
     "http://localhost:5000/images/dishes/spicy_tomato_shakshuka.png",
     "http://localhost:5000/images/dishes/smoked_salmon_toast.png",
-    "http://localhost:5000/images/dishes/sweet_potato_and_walnut_salad.png",
-    "http://localhost:5000/images/dishes/tamara_double_morning.png",
-    "http://localhost:5000/images/dishes/tamara_toast.png"
+    "http://localhost:5000/images/dishes/sweet_potato_and_walnut_salad.png",   "http://localhost:5000/images/dishes/tamara_toast.png"
   ];
   export default imageUrls;
