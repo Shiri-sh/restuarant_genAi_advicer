@@ -119,6 +119,7 @@ export default function AudioRecorder({ onResult }) {
       className="mic-button"
       onClick={!isRecording ? startRecording : undefined}
       disabled={loading || isRecording}
+      data-testid="mic-btn"
     >
       <Mic size={22} />
     </button>
@@ -136,10 +137,10 @@ export default function AudioRecorder({ onResult }) {
             />
           ))}
         </div>
-        <button className="icon-btn cancel" onClick={cancelRecording}>
+        <button data-testid="cancel-btn" className="icon-btn cancel" onClick={cancelRecording}>
           <X size={18} />
         </button>
-        <button className="icon-btn confirm" onClick={stopRecording}>
+        <button data-testid="confirm-btn" className="icon-btn confirm" onClick={stopRecording}>
           <Check size={18} />
         </button>
       </div>
@@ -147,8 +148,8 @@ export default function AudioRecorder({ onResult }) {
 
     {loading && (
       <div className="loading">
-        <span className="spinner" />
-        <span>Listening & thinking…</span>
+        <span data-testid="loading-icon" className="spinner" />
+        <span data-testid="loading-text">Listening & thinking…</span>
       </div>
     )}
   </div>
