@@ -23,12 +23,12 @@ const analyzeAudio =  async (req, res) => {
       const audioPart = await prepareAudioforGenAI(file);
       const dishesInfo = await prepareDataforGenAI();
       const result = await getResponseFromGenAI(audioPart, dishesInfo);
-      
+      //should clean the files
       res.status(200).json({ success: true, recommended_dishes: result.recommended_dishes });
     } catch (error) {
         console.error(error);
         if (req.file.path && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
-        res.status(500).json({ error: "An error occurred while processing the request." });
+        res.status(500).json({ error: "An error occurred while processing the request. please try again later" });
     }
 };
 

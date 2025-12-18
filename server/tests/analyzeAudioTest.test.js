@@ -1,4 +1,5 @@
 import path from "path";
+import fs from "fs";
 import {prepareAudioforGenAI, prepareDataforGenAI, getResponseFromGenAI} from "../services/analyzeAudioServices.js";
 
 //תלויות-חיצוניות-לעשות-עליהן-mock
@@ -33,7 +34,7 @@ describe("prepareAudioforGenAI", () => {
    //דימוי-קובץ-מזויף
     const file = { path: "/tmp/test.wav" };
 
-    // כאילו-שההמרה-הצליחה
+    // כאילו-שההמרה-הצליחהF
     convertToMp3.mockResolvedValue();
 
     //מגדירים-ערך-מזויף-שג'מיני-מצפה
@@ -57,11 +58,37 @@ describe("prepareAudioforGenAI", () => {
     expect(result).toEqual({ mock: "audioPart" });
   });
 
-  it("throws error when conversion fails", async () => {
+  it("throws error when convertToMp3 fails", async () => {
     const file = { path: "/tmp/test.wav" };
 
     // מדמים כשל בהמרת הקובץ
     convertToMp3.mockRejectedValue(new Error("Conversion failed"));
+
+    // בודקים שהשגיאה אכן נזרקת החוצה
+    await expect(prepareAudioforGenAI(file))
+      .rejects
+      .toThrow("Conversion failed");
+  });
+  it("cleans up files on error", async () => {
+    const file = { path: "/tmp/test.wav" };
+    
+    // מדמים כשל בהמרת הקובץ
+    convertToMp3.mockRejectedValue(new Error("Conversion failed"));
+
+    // בודקים שהשגיאה אכן נזרקת החוצה
+    await expect(prepareAudioforGenAI(file))
+      .rejects
+      .toThrow("Conversion failed");
+
+    // בודקים שהקובץ המזויף נמחק
+    expect(fs.unlinkSync).toHaveBeenCalledWith(path.join("/tmp", "test.wav"));
+    expect(fs.unlinkSync).toHaveBeenCalledWith(path.join("/tmp", "test.mp3"));
+  });
+  it("throws error when fileToGenerativePart fails", async () => {
+    const file = { path: "/tmp/test.wav" };
+
+    // מדמים כשל בהמרת הקובץ
+    fileToGenerativePart.mockRejectedValue(new Error("Conversion failed"));
 
     // בודקים שהשגיאה אכן נזרקת החוצה
     await expect(prepareAudioforGenAI(file))
@@ -99,16 +126,22 @@ describe("prepareDataforGenAI", () => {
     expect(typeof result).toBe("string");
 
     // בודקים שהמידע פורמט נכון
-    expect(result).toContain("name: Pizza");
-    expect(result).toContain("price: 60");
-    expect(result).toContain("image_url: pizza.jpg");
-    expect(result).toContain("category_id: 2");
-    expect(result).toContain("is_vegan: false");
-    expect(result).toContain("is_vegetarian: true");
-    expect(result).toContain("on_sale: false");
-    expect(result).toContain("created_at: 2024-01-01");
-    expect(result).toContain("ingredients: Cheese");
-    expect(result).toContain("sale_price: null");
+    const expectedFields = [
+      "name: Pizza",
+      "ingredients: Cheese",
+      "price: 60",
+      "image_url: pizza.jpg",
+      "category_id: 2",
+      "is_vegan: false",
+      "is_vegetarian: true",
+      "on_sale: false",
+      "sale_price: null",
+      "created_at: 2024-01-01"
+    ];
+
+    expectedFields.forEach(field => {
+      expect(result).toContain(field);
+    });
   });
 
   it("throws error if getDishes fails", async () => {

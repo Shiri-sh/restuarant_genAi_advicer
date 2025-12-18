@@ -59,7 +59,8 @@ const getResponseFromGenAI = async (audioPart, dishesInfo) => {
             model: "gemini-2.5-flash",
             contents: contents,
         });
-        return JSON.parse(result);
+        console.log("GenAI result:", result);
+        return JSON.parse(result.text);
     } catch (error) {
         console.error("Error in getResponseFromGenAI:");
         throw error;
