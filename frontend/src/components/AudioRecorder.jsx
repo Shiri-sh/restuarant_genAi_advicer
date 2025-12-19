@@ -38,7 +38,11 @@ export default function AudioRecorder({ onResult }) {
         if (chunksRef.current.length === 0) return;
 
         setLoading(true);
-        const blob = new Blob(chunksRef.current, { type: "audio/webm" });
+        const chunks =
+          window.__TEST_AUDIO_CHUNKS__ ?? chunksRef.current;
+
+        const blob = new Blob(chunks, { type: "audio/webm" });
+        //const blob = new Blob(chunksRef.current, { type: "audio/webm" });
         console.log("blob:", blob);
         try {
           const recommendations = await sendAudioToServer(blob);
@@ -114,44 +118,44 @@ export default function AudioRecorder({ onResult }) {
   };
 
   return (
-  <div className="audio-recorder">
-    <button
-      className="mic-button"
-      onClick={!isRecording ? startRecording : undefined}
-      disabled={loading || isRecording}
-      data-testid="mic-btn"
-    >
-      <Mic size={22} />
-    </button>
+    <div className="audio-recorder">
+      <button
+        className="mic-button"
+        onClick={!isRecording ? startRecording : undefined}
+        disabled={loading || isRecording}
+        data-testid="mic-btn"
+      >
+        <Mic size={22} />
+      </button>
 
-    {/* תוכן הקלטה – מופיע מימין */}
-    {isRecording && (
-      <div className="record-bar">
-        
-        <div className="waveform">
-          {levels.map((lvl, i) => (
-            <div
-              key={i}
-              className="wave-bar"
-              style={{ height: `${lvl}px` }}
-            />
-          ))}
+      {/* תוכן הקלטה – מופיע מימין */}
+      {isRecording && (
+        <div className="record-bar">
+
+          <div className="waveform">
+            {levels.map((lvl, i) => (
+              <div
+                key={i}
+                className="wave-bar"
+                style={{ height: `${lvl}px` }}
+              />
+            ))}
+          </div>
+          <button data-testid="cancel-btn" className="icon-btn cancel" onClick={cancelRecording}>
+            <X size={18} />
+          </button>
+          <button data-testid="confirm-btn" className="icon-btn confirm" onClick={stopRecording}>
+            <Check size={18} />
+          </button>
         </div>
-        <button data-testid="cancel-btn" className="icon-btn cancel" onClick={cancelRecording}>
-          <X size={18} />
-        </button>
-        <button data-testid="confirm-btn" className="icon-btn confirm" onClick={stopRecording}>
-          <Check size={18} />
-        </button>
-      </div>
-    )}
+      )}
 
-    {loading && (
-      <div className="loading">
-        <span data-testid="loading-icon" className="spinner" />
-        <span data-testid="loading-text">Listening & thinking…</span>
-      </div>
-    )}
-  </div>
-);
+      {loading && (
+        <div className="loading">
+          <span data-testid="loading-icon" className="spinner" />
+          <span data-testid="loading-text">Listening & thinking…</span>
+        </div>
+      )}
+    </div>
+  );
 }
