@@ -14,14 +14,13 @@ const ai = new GoogleGenAI({ apiKey: process.env.GENAI_API_KEY });
 const prepareAudioforGenAI = async (file) => {
     let convertedFilePath = null;
     const originalFilePath = file.path;
-    console.log("originalFilePath", originalFilePath);
     try {
         const originalDir = path.dirname(originalFilePath);
         const originalName = path.basename(originalFilePath, path.extname(originalFilePath));
         convertedFilePath = path.join(originalDir, `${originalName}.mp3`);
 
         await convertToMp3(originalFilePath, convertedFilePath);
-        return fileToGenerativePart(convertedFilePath, "audio/mp3");
+        return {audioPart: fileToGenerativePart(convertedFilePath, "audio/mp3"),originalFilePath:originalFilePath,convertedFilePath:convertedFilePath};
 
     } catch (error) {
         if (originalFilePath && fs.existsSync(originalFilePath)) fs.unlinkSync(originalFilePath);

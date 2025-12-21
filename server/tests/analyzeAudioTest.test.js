@@ -1,15 +1,13 @@
 import path from "path";
 import fs from "fs";
 import {prepareAudioforGenAI, prepareDataforGenAI, getResponseFromGenAI} from "../services/analyzeAudioServices.js";
-
-//תלויות-חיצוניות-לעשות-עליהן-mock
 import { convertToMp3, fileToGenerativePart } from "../services/fileActions.js";
 import { getDishes } from "../models/dishesModel.js";
 import { GoogleGenAI } from "@google/genai";
-//כל-התלויות-שרצות-באמת-המטרה-היא-לעשות-להן--mock-
-//כדי-שלא-ירצו-באמת
+
 jest.mock("fs");
 jest.mock("path", () => jest.requireActual("path"));
+
 jest.mock("../services/fileActions.js", () => ({
   convertToMp3: jest.fn(),
   fileToGenerativePart: jest.fn()
@@ -31,40 +29,38 @@ jest.mock("@google/genai", () => {
 describe("prepareAudioforGenAI", () => {
 
   it("converts audio to mp3 and returns generative part", async () => {
-   //דימוי-קובץ-מזויף
+  
     const file = { path: "/tmp/test.wav" };
 
-    // כאילו-שההמרה-הצליחהF
     convertToMp3.mockResolvedValue();
 
-    //מגדירים-ערך-מזויף-שג'מיני-מצפה
     fileToGenerativePart.mockReturnValue({ mock: "audioPart" });
 
     const result = await prepareAudioforGenAI(file);
 
-    //בדיקת-חישוב-נתיב-נכון
+   
     expect(convertToMp3).toHaveBeenCalledWith(
       "/tmp/test.wav",
       path.join("/tmp", "test.mp3")
     );
 
-    // בדיקת-אודיו-בפורמט-הנכון
+    
     expect(fileToGenerativePart).toHaveBeenCalledWith(
       path.join("/tmp", "test.mp3"),
       "audio/mp3"
     );
 
-    // בודקים שהפונקציה מחזירה את מה שהתלות החזירה
+    
     expect(result).toEqual({ mock: "audioPart" });
   });
 
   it("throws error when convertToMp3 fails", async () => {
     const file = { path: "/tmp/test.wav" };
 
-    // מדמים כשל בהמרת הקובץ
+   
     convertToMp3.mockRejectedValue(new Error("Conversion failed"));
 
-    // בודקים שהשגיאה אכן נזרקת החוצה
+    
     await expect(prepareAudioforGenAI(file))
       .rejects
       .toThrow("Conversion failed");
@@ -73,24 +69,23 @@ describe("prepareAudioforGenAI", () => {
     const file = { path: "/tmp/test.wav" };
 
     fs.existsSync.mockReturnValue(true);
-    // מדמים כשל בהמרת הקובץ
+   
     convertToMp3.mockRejectedValue(new Error("Conversion failed"));
 
-    // בודקים שהשגיאה אכן נזרקת החוצה
+    
     await expect(prepareAudioforGenAI(file))
       .rejects
       .toThrow("Conversion failed");
 
-    // בודקים שהקובץ המזויף נמחק
+   
     expect(fs.unlinkSync).toHaveBeenCalledWith("/tmp/test.wav");
   });
   it("throws error when fileToGenerativePart fails", async () => {
     const file = { path: "/tmp/test.wav" };
 
-    // מדמים כשל בהמרת הקובץ
+    
     fileToGenerativePart.mockRejectedValue(new Error("Conversion failed"));
 
-    // בודקים שהשגיאה אכן נזרקת החוצה
     await expect(prepareAudioforGenAI(file))
       .rejects
       .toThrow("Conversion failed");
@@ -101,7 +96,6 @@ describe("prepareAudioforGenAI", () => {
 describe("prepareDataforGenAI", () => {
 
   it("returns formatted dishes data as string", async () => {
-    //נכניס-נתונים-מזויפים-במקום-המסד-נתונים
     getDishes.mockResolvedValue([
       {
         name: "Pizza",
@@ -119,13 +113,13 @@ describe("prepareDataforGenAI", () => {
 
     const result = await prepareDataforGenAI();
 
-    //בודקים-שנקראה-הפונקציה
+    
     expect(getDishes).toHaveBeenCalled();
 
-    // בודקים שהפלט הוא מחרוזת
+    
     expect(typeof result).toBe("string");
 
-    // בודקים שהמידע פורמט נכון
+    
     const expectedFields = [
       "name: Pizza",
       "ingredients: Cheese",
@@ -145,10 +139,9 @@ describe("prepareDataforGenAI", () => {
   });
 
   it("throws error if getDishes fails", async () => {
-    //במקרה-של-כשל
+    
     getDishes.mockRejectedValue(new Error("DB error"));
 
-    // בדיקה-שנזרקת-שגיאה
     await expect(prepareDataforGenAI())
       .rejects
       .toThrow("DB error");
@@ -159,31 +152,28 @@ describe("prepareDataforGenAI", () => {
 describe("getResponseFromGenAI", () => {
 
   it("returns parsed AI response", async () => {
-    //תשובה-מזויפת-בפורמט-של-AI
+   
     const mockAIResponse = JSON.stringify({
-      response: ["Pasta"]
+      response: {"recommended_dishes":[{"name":"Pasta"}]}
     });
 
-    //גישה-מזויפת-לAI
     const aiInstance = GoogleGenAI.mock.instances[0];
 
-    //לוודא-שהקריאה-של-הAI
-    //תחזיר-את-הJSON-המזויף
+    
     aiInstance.models.generateContent.mockResolvedValue(mockAIResponse);
    
     const result = await getResponseFromGenAI({ audio: true }, "dishes info");
 
-   //בודקים-שחזר-תשובה-בהתאמה
-    expect(result.response).toContain("Pasta");
+   
+    expect(result.response.recommended_dishes).toContain("Pasta");
   });
 
   it("throws error when AI fails", async () => {
     const aiInstance = GoogleGenAI.mock.instances[0];
 
-    //בדיקה-שיש-שגיאה-מAI
+    
     aiInstance.models.generateContent.mockRejectedValue(new Error("AI error"));
-
-    //נדוק-שהשגיאה-נזרקת
+    
     await expect(
       getResponseFromGenAI({ audio: true }, "dishes info")
     ).rejects.toThrow("AI error");

@@ -19,16 +19,24 @@ const analyzeAudio =  async (req, res) => {
         console.error("Multer failed to provide req.file. Check client FormData and field name.");
         return res.status(400).json({ error: "Audio file is required or upload failed." });
       }
-
-      const audioPart = await prepareAudioforGenAI(file);
+      const { audioPart, originalFilePath: origPath, convertedFilePath: convPath } = await prepareAudioforGenAI(file);
+      originalFilePath = origPath;
+      convertedFilePath = convPath;
       const dishesInfo = await prepareDataforGenAI();
       const result = await getResponseFromGenAI(audioPart, dishesInfo);
-      //should clean the files
+
       res.status(200).json({ success: true, response: result});
     } catch (error) {
         console.error(error);
         if (req.file.path && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
         res.status(500).json({ error: "An error occurred while processing the request. please try again later" });
+    }
+    finally {
+      [originalFilePath, convertedFilePath].forEach(f => {
+        if (f && fs.existsSync(f)) {
+          try { fs.unlinkSync(f); } catch(e) { console.error("Failed to delete file", f, e); }
+        }
+      });
     }
 };
 
