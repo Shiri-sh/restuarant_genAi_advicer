@@ -28,8 +28,28 @@ Your task:
   ]
 }
 
+ADDITIONAL RULE – IMPORTANT:
+If no suitable dish can be recommended due to any of the following reasons:
+- The requested dish does not exist in the database
+- The request contains a contradiction (e.g., meat dish in a dairy-only restaurant)
+- The dish is unavailable, sold out, or not offered
+- The request is unclear, incomplete, or cannot be confidently understood
+
+Then return the following JSON structure INSTEAD of recommended_dishes:
+
+{
+  "no_recommendation": {
+    "message": "A clear, polite explanation to the customer describing why no recommendation can be made, referring directly to their request and the limitation.",
+    "reason_type": "one of: NOT_AVAILABLE | CONTRADICTION | NOT_FOUND | UNCLEAR_REQUEST"
+  }
+}
+
 Requirements:
 - The JSON must be valid and parsable.
+- Return ONLY ONE of the two structures:
+  - recommended_dishes
+  - no_recommendation
+- Never return both structures together.
 - Only include dishes that are highly relevant; avoid extra commentary.
 - Keep the reason concise, clear, and actionable.
 - If multiple dishes are suitable, include them all in the list in descending order of relevance, but no more than 5 dishes.
