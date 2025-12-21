@@ -25,5 +25,25 @@ describe("resuarent_test", () => {
             .should("be.visible");
 
     });
+    it("send_audio_no_recommended_to_server_test", () => {
+      cy.fixture("test-audio-no-recommended.webm.mp3", "binary").then((audio) => {
+        const blob = Cypress.Blob.binaryStringToBlob(
+          audio,
+          "audio/webm;codecs=opus"
+        );
+        cy.visit("http://localhost:3000", {
+          onBeforeLoad(win) {
+            win.__TEST_AUDIO_CHUNKS__ = [blob];
+          }
+        });
+      });
 
+    cy.wait(1000);
+    cy.get(".mic-button").click({ force: true });
+    cy.wait(5000);
+    cy.get(".wave-bar").first().should("be.visible");
+    cy.get("[data-testid='confirm-btn']").click({ force: true });
+    cy.wait(2000);
+    cy.get(".no-recommendations").should("be.visible");
+    })
 });
