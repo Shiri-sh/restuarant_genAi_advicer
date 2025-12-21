@@ -2,11 +2,7 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 import fs from "fs";
 import dotenv from "dotenv";
-import path from "path"; 
-import prompt from "../services/prompt.js";
 import {GoogleGenAI} from '@google/genai';
-import { convertToMp3, fileToGenerativePart } from "../services/fileActions.js";
-import {getDishes} from "../models/dishesModel.js";
 import { getResponseFromGenAI, prepareAudioforGenAI, prepareDataforGenAI } from "../services/analyzeAudioServices.js";
 
 dotenv.config();
