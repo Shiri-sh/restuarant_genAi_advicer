@@ -26,7 +26,7 @@ describe("resuarent_test", () => {
 
     });
     it("send_audio_no_recommended_to_server_test", () => {
-      cy.fixture("test-audio-no-recommended.webm.mp3", "binary").then((audio) => {
+      cy.fixture("test-audio-no-recommended.webm", "binary").then((audio) => {
         const blob = Cypress.Blob.binaryStringToBlob(
           audio,
           "audio/webm;codecs=opus"
