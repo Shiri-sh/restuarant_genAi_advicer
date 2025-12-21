@@ -36,24 +36,20 @@ test("does not send audio when cancel is clicked", async () => {
 
   expect(sendAudioToServer).not.toHaveBeenCalled();
 });
+
 test("sends audio when confirm is clicked", async () => {
   render(<AudioRecorder onResult={jest.fn()} />);
 
-  // התחלת הקלטה
   fireEvent.click(screen.getByTestId("mic-btn"));
 
-  // מחכים ל־V
   const confirmBtn = await screen.findByTestId("confirm-btn");
 
-  // מדמים שיש אודיו
   mediaRecorderInstance.ondataavailable({
     data: new Blob(["audio"], { type: "audio/webm" })
   });
 
-  // לוחצים V
   fireEvent.click(confirmBtn);
 
-  // ⚠️ מפעילים ידנית את onstop
   await mediaRecorderInstance.onstop();
 
   expect(sendAudioToServer).toHaveBeenCalledTimes(1);
