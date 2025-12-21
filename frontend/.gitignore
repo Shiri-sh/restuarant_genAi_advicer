@@ -7,7 +7,7 @@ node_modules/
 images/
 
 # testing
-/coverage
+#/coverage
 
 # production
 /build
