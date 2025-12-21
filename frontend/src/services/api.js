@@ -8,6 +8,6 @@ export const sendAudioToServer = async (audioBlob) => {
     });
   
     const data = await res.json();
-    return data.recommended_dishes;
+    return data.response;
   };
 

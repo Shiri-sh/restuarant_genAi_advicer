@@ -40,7 +40,7 @@ Then return the following JSON structure INSTEAD of recommended_dishes:
 {
   "no_recommendation": {
     "message": "A clear, polite explanation to the customer describing why no recommendation can be made, referring directly to their request and the limitation.",
-    "reason_type": "one of: NOT_AVAILABLE | CONTRADICTION | NOT_FOUND | UNCLEAR_REQUEST"
+    "reason_type": "one of: NOT AVAILABLE | CONTRADICTION | NOT FOUND | UNCLEAR REQUEST"
   }
 }
 

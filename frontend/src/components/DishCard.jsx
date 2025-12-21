@@ -40,7 +40,7 @@ export default function DishCard({ dish }) {
             {dish.price}₪
           </span>
           
-          {dish.on_sale && dish.sale_price &&(
+          {dish.on_sale && dish.sale_price!=0 &&(
             <>
               <span className="sale-price">{dish.sale_price}₪</span>
               {/* <span className="sale-savings">Save {savings}₪</span> */}

@@ -1,11 +1,13 @@
 import AudioRecorder from "../components/AudioRecorder";
 import DishCard from "../components/DishCard";
 import { useState } from "react";
-import imageUrls  from "../services/dishesImagesUrls";
+import imageUrls from "../services/dishesImagesUrls";
+import { MessageSquareWarning } from 'lucide-react';
 import "../css/Home.css";
 
 export default function Home() {
   const [dishes, setDishes] = useState([]);
+  const [noRecommendations, setNoRecommendations] = useState({});
 
   return (
     <div className="home-page">
@@ -20,9 +22,7 @@ export default function Home() {
           ))}
         </div>
         <div className="header-content">
-          {/* <img src="/images/logo_white.png"  alt="logo"/>
-          <img src="/images/tamara_logo_english_white.png"  className="logo" alt="logo"/> */}
-           <div className="brand">
+          <div className="brand">
             <h3 className="brand-name">TAMARA</h3>
             <span className="brand-subtitle">cafe & restaurant</span>
           </div>
@@ -33,8 +33,16 @@ export default function Home() {
         </div>
       </div>
 
-      <AudioRecorder onResult={setDishes} />
-
+      <AudioRecorder onResultRecommendations={setDishes} onResultNoRecommendations={setNoRecommendations} />
+      <div className="no-recommendations">
+        {noRecommendations?.message && noRecommendations?.reason_type &&  (
+          <div>
+            <MessageSquareWarning className="no-recommendations-icon" />
+            <h2 className="no-recommendations-title">{noRecommendations.reason_type}</h2>
+            <p className="no-recommendations-message">{noRecommendations.message}</p>
+          </div>
+        )}
+      </div>
       <div className="dishes-grid">
         {Array.isArray(dishes) &&
           dishes.map((dish, index) => <DishCard key={index} dish={dish} />)}

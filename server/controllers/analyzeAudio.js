@@ -24,7 +24,7 @@ const analyzeAudio =  async (req, res) => {
       const dishesInfo = await prepareDataforGenAI();
       const result = await getResponseFromGenAI(audioPart, dishesInfo);
       //should clean the files
-      res.status(200).json({ success: true, recommended_dishes: result.recommended_dishes });
+      res.status(200).json({ success: true, response: result});
     } catch (error) {
         console.error(error);
         if (req.file.path && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);

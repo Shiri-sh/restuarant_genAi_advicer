@@ -161,7 +161,7 @@ describe("getResponseFromGenAI", () => {
   it("returns parsed AI response", async () => {
     //תשובה-מזויפת-בפורמט-של-AI
     const mockAIResponse = JSON.stringify({
-      recommended_dishes: ["Pasta"]
+      response: ["Pasta"]
     });
 
     //גישה-מזויפת-לAI
@@ -174,7 +174,7 @@ describe("getResponseFromGenAI", () => {
     const result = await getResponseFromGenAI({ audio: true }, "dishes info");
 
    //בודקים-שחזר-תשובה-בהתאמה
-    expect(result.recommended_dishes).toContain("Pasta");
+    expect(result.response).toContain("Pasta");
   });
 
   it("throws error when AI fails", async () => {

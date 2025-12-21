@@ -3,7 +3,7 @@ import { sendAudioToServer } from "../services/api";
 import "../css/AudioRecorder.css";
 import { Mic, Check, X } from "lucide-react";
 
-export default function AudioRecorder({ onResult }) {
+export default function AudioRecorder({ onResultRecommendations,onResultNoRecommendations }) {
   const [isRecording, setIsRecording] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -19,6 +19,7 @@ export default function AudioRecorder({ onResult }) {
 
   const startRecording = async () => {
     try {
+
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
       const mediaRecorder = new MediaRecorder(stream);
@@ -36,7 +37,8 @@ export default function AudioRecorder({ onResult }) {
         }
 
         if (chunksRef.current.length === 0) return;
-
+        onResultNoRecommendations({});
+        onResultRecommendations([]);
         setLoading(true);
         const chunks =
           window.__TEST_AUDIO_CHUNKS__ ?? chunksRef.current;
@@ -45,10 +47,12 @@ export default function AudioRecorder({ onResult }) {
         console.log("blob:", blob);
         try {
           const recommendations = await sendAudioToServer(blob);
-          if (Array.isArray(recommendations)) {
-            onResult(recommendations);
-          } else {
-            onResult([]);
+          console.log("recommendations:", recommendations);
+          if(recommendations.recommended_dishes){
+            onResultRecommendations(recommendations.recommended_dishes);
+          }
+          else {
+            onResultNoRecommendations(recommendations.no_recommendation);
           }
         } catch (err) {
           alert(err.error || "Error sending audio to server.");
