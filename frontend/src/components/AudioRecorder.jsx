@@ -40,7 +40,12 @@ export default function AudioRecorder({ onResult }) {
         setLoading(true);
         const chunks =
           window.__TEST_AUDIO_CHUNKS__ ?? chunksRef.current;
-
+          console.log("RAW chunks:", chunks);
+          
+          // if (window.__TEST_AUDIO_CHUNKS__) {
+          //   const decoded = new TextDecoder().decode(chunks[0]);
+          //   console.log("DECODED TEST TEXT:", decoded);
+          // }
         const blob = new Blob(chunks, { type: "audio/webm" });
         //const blob = new Blob(chunksRef.current, { type: "audio/webm" });
         console.log("blob:", blob);
