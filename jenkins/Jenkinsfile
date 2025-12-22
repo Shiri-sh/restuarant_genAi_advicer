@@ -33,6 +33,16 @@ pipeline {
                 sh "docker-compose -f ${DOCKER_COMPOSE_FILE} build"
             }
         }
+        stage('Run Cypress Integration Tests') {
+            steps {
+                echo "Running Cypress end-to-end tests..."
+                sh '''
+                  cd cypress
+                  npm install
+                  npx cypress run
+                '''
+            }
+        }
 
         // stage('Push Docker Images') {
         //     steps {
