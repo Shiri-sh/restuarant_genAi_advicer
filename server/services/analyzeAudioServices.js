@@ -32,6 +32,7 @@ const prepareAudioforGenAI = async (file) => {
 const prepareDataforGenAI = async () => {
     try{
     const dishes = await getDishes();
+    console.log("dishes",dishes);
     return dishes.map(dish => {
         return `name: ${dish.name},
              ingredients: ${dish.ingredients}, 

@@ -1,0 +1,5 @@
+.env
+coverage/
+tests/
+.git
+.gitignore

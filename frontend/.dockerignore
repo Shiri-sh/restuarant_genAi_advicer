@@ -1,0 +1,7 @@
+.git
+.gitignore
+
+# לא להכניס טסטים
+src/tests
+
+coverage/

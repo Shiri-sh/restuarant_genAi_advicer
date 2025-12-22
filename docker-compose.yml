@@ -39,6 +39,19 @@ services:
     depends_on:
       - mysql
     restart: always
-
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - PORT_SERVER=5000
+      - PORT_FRONTEND=3000  
+    ports:
+      - "3000:3000"
+    restart: always
 volumes:
   tamara_data:

@@ -4,6 +4,7 @@ const getDishes = async () => {
   try {
     const sql = "SELECT * FROM dishes WHERE in_stock = 1";
     const [rows] = await con.query(sql);
+    console.log("rows", rows);
     return rows;
   } catch (err) {
     throw err;
