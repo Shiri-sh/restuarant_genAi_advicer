@@ -20,9 +20,7 @@ const analyzeAudio = async (req, res) => {
     const { audioPart, originalFilePath: orig, convertedFilePath: conv } = await prepareAudioforGenAI(file);
     originalFilePath = orig;
     convertedFilePath = conv;
-    // let { audioPart, originalFilePath: originalFilePath, convertedFilePath: convertedFilePath } = await prepareAudioforGenAI(file);
     const dishesInfo = await prepareDataforGenAI();
-    console.log("dishesInfo", dishesInfo);
     const result = await getResponseFromGenAI(audioPart, dishesInfo);
 
     res.status(200).json({ success: true, response: result });
