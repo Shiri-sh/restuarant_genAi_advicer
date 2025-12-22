@@ -1,0 +1,93 @@
+pipeline {
+  agent any
+    environment {
+        MYSQL_HOST = 'mysql'
+        MYSQL_USER = 'tamara'
+        MYSQL_PASSWORD = 'tamara123'
+        MYSQL_DATABASE = 'TamaraResDB'
+        PORT_SERVER = '5000'
+        PORT_FRONTEND = '3000'
+        DOCKER_HUB_CREDENTIALS = 'docker-hub-creds' 
+        DOCKER_IMAGE_SERVER = 'shiri/restuarant-server'
+        DOCKER_IMAGE_FRONTEND = 'shiri/restuarant-frontend'
+    }
+
+    stages {
+        stage('Check OS') {
+    steps {
+        script {
+            if (isUnix()) {
+                echo "Running on Linux/Unix"
+            } else {
+                echo "Running on Windows"
+            }
+        }
+    }
+}
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Shiri-sh/restuarant_genAi_advicer.git'
+            }
+        }
+
+        stage('Build & Test Backend') {
+            steps {
+                dir('server') {
+                    echo "Installing server dependencies..."
+                    sh 'npm install --legacy-peer-deps'
+                    sh 'npm set strict-ssl false'
+                    echo "Running server tests..."
+                    sh 'npm test'
+                }
+            }
+        }
+
+        stage('Build & Test Frontend') {
+            steps {
+                dir('frontend') {
+                    echo "Installing frontend dependencies..."
+                    sh 'npm install'
+                    echo "Running frontend tests..."
+                    sh 'npm test'
+                }
+            }
+        }
+
+        stage('Build Docker Images') {
+            steps {
+                echo "Building Docker images..."
+                sh "docker build -t $DOCKER_IMAGE_SERVER ./server"
+                sh "docker build -t $DOCKER_IMAGE_FRONTEND ./frontend"
+            }
+        }
+
+        stage('Push Docker Images') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS}", passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                    echo "Logging in to Docker Hub..."
+                    sh "docker login -u $DOCKER_USER -p $DOCKER_PASS"
+                    echo "Pushing server image..."
+                    sh "docker push $DOCKER_IMAGE_SERVER"
+                    echo "Pushing frontend image..."
+                    sh "docker push $DOCKER_IMAGE_FRONTEND"
+                }
+            }
+        }
+
+        stage('Deploy with Docker Compose') {
+            steps {
+                echo "Deploying project with docker-compose..."
+                sh 'docker-compose up -d --build'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "Pipeline finished"
+        }
+        failure {
+            echo "Pipeline failed!"
+        }
+    }
+}
