@@ -57,11 +57,11 @@ INSERT INTO dishes (
     name, price, image_url, ingredients, category_id,
     is_vegan, is_vegetarian, in_stock, on_sale, sale_price
 ) VALUES
---focaccias
+-- focaccias
 ('Coal focaccia', 64.00, '/images/dishes/coal_focaccia.png',
  'Grilled eggplant, placed on crispy focaccia with a drizzle of millstone-ground tahini, date syrup, feta cheese shavings, and basil.', 
  4, FALSE, TRUE, TRUE, TRUE, 58.00),
- --Sandwiches
+ -- Sandwiches
  ('Smoked salmon sandwich', 62.00, '/images/dishes/smoked_salmon_sandwich.png',
  'Cream cheese, smoked salmon, red onion, lettuce and tomato slices.', 
  5, FALSE, FALSE, TRUE, FALSE, NULL),
@@ -74,7 +74,7 @@ INSERT INTO dishes (
  ('Omelet sandwich', 49.00, '/images/dishes/omelet_sandwich.png',
  'Cream cheese, vegetable omelet, lettuce, cucumber and tomato slices.',
  5, FALSE, TRUE, TRUE, FALSE, NULL),
- --Fish
+ -- Fish
  ('Sea morals', 134.00, '/images/dishes/sea_morals.png',
  'Served with green mashed potatoes, green beans, broccoli florets and red wine sauce.',
  10, FALSE, FALSE, TRUE, FALSE, NULL),
@@ -83,7 +83,7 @@ INSERT INTO dishes (
  10, FALSE, FALSE, TRUE, TRUE, 79.00),
   ('Japanese sea bass', 49.00, '/images/dishes/japanese_sea_bass.png',
  'A meaty whole fish, grilled, with the aroma of garlic and olive oil, accompanied by oven-roasted root vegetables and sauce...',
- 10, FALSE, FALSE, TRUE, FALSE, NULL);
+ 10, FALSE, FALSE, TRUE, FALSE, NULL),
 
 -- Starters
 ('Chips', 32.00, '/images/dishes/chips.png',
