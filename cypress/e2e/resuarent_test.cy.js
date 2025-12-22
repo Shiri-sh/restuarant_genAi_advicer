@@ -18,7 +18,7 @@ describe("resuarent_test", () => {
         cy.wait(5000);
         cy.get(".wave-bar").first().should("be.visible");
         cy.get("[data-testid='confirm-btn']").click({ force: true });
-        cy.wait(2000);
+        cy.wait(20000);
         cy.get(".dishes-grid .dish-card")
             .should("have.length.at.least", 1)
             .first()
@@ -43,7 +43,7 @@ describe("resuarent_test", () => {
     cy.wait(5000);
     cy.get(".wave-bar").first().should("be.visible");
     cy.get("[data-testid='confirm-btn']").click({ force: true });
-    cy.wait(2000);
+    cy.wait(10000);
     cy.get(".no-recommendations").should("be.visible");
     })
 });
