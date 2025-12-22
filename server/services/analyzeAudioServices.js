@@ -13,7 +13,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.GENAI_API_KEY });
 
 const prepareAudioforGenAI = async (file) => {
     let convertedFilePath = null;
-    const originalFilePath = file.path;
+    let originalFilePath = file.path;
     try {
         const originalDir = path.dirname(originalFilePath);
         const originalName = path.basename(originalFilePath, path.extname(originalFilePath));

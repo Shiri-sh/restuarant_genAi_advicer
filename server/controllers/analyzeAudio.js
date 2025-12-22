@@ -15,9 +15,7 @@ const analyzeAudio =  async (req, res) => {
         console.error("Multer failed to provide req.file. Check client FormData and field name.");
         return res.status(400).json({ error: "Audio file is required or upload failed." });
       }
-      const { audioPart, originalFilePath: origPath, convertedFilePath: convPath } = await prepareAudioforGenAI(file);
-      originalFilePath = origPath;
-      convertedFilePath = convPath;
+      let { audioPart, originalFilePath, convertedFilePath } = await prepareAudioforGenAI(file);
       const dishesInfo = await prepareDataforGenAI();
       const result = await getResponseFromGenAI(audioPart, dishesInfo);
 
