@@ -34,7 +34,7 @@ describe("sendAudioToServer", () => {
       })
     );
       //בדיקה-שהתוצאה-היא-מה-שהיה-בדימוי
-    expect(result).toEqual(["Pizza", "Pasta"]);
+    expect(result.recommended_dishes).toEqual(["Pizza", "Pasta"]);
   });
 
 });
