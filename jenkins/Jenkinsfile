@@ -34,6 +34,28 @@ pipeline {
             steps {
                 echo "Running Cypress E2E tests..."
                 sh '''
+                    # Check if cypress.config.js exists
+                    ls -la | grep cypress
+                    
+                    # If not exists, create it
+                    if [ ! -f cypress.config.js ]; then
+                        echo "Creating cypress.config.js..."
+                        cat > cypress.config.js << 'EOF'
+const { defineConfig } = require('cypress')
+
+module.exports = defineConfig({
+  e2e: {
+    baseUrl: 'http://localhost:3000',
+    supportFile: 'cypress/support/e2e.js',
+    specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
+    video: false,
+    screenshotOnRunFailure: true,
+  },
+})
+EOF
+                    fi
+                    
+                    # Run Cypress
                     docker run --rm \
                         -v $(pwd):/e2e \
                         -w /e2e \
