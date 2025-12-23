@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         DOCKER_HUB_CREDENTIALS = 'docker-hub-creds'
-        DOCKER_IMAGE_SERVER = 'restuarant_genai_advicer-server'
-        DOCKER_IMAGE_FRONTEND = 'restuarant_genai_advicer-frontend'
+        DOCKER_IMAGE_SERVER = 'shirish3680/restuarant_genai_advicer-server'
+        DOCKER_IMAGE_FRONTEND = 'shirish3680/restuarant_genai_advicer-frontend'
         DOCKER_COMPOSE_FILE = 'docker-compose.yml'
     }
 
@@ -30,7 +30,7 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 echo "Building Docker images using Docker Compose..."
-                sh "docker-compose -f ${DOCKER_COMPOSE_FILE} build"
+                sh "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v ${WORKSPACE}:${WORKSPACE} -w ${WORKSPACE} docker/compose:1.29.2 -f ${DOCKER_COMPOSE_FILE} build"
             }
         }
         stage('Run Cypress Integration Tests') {
@@ -44,23 +44,23 @@ pipeline {
             }
         }
 
-        // stage('Push Docker Images') {
-        //     steps {
-        //         withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-        //             echo "Logging in to Docker Hub..."
-        //             sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
-        //             echo "Pushing server image..."
-        //             sh "docker push ${DOCKER_IMAGE_SERVER}"
-        //             echo "Pushing frontend image..."
-        //             sh "docker push ${DOCKER_IMAGE_FRONTEND}"
-        //         }
-        //     }
-        // }
+        stage('Push Docker Images') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    echo "Logging in to Docker Hub..."
+                    sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                    echo "Pushing server image..."
+                    sh "docker push ${DOCKER_IMAGE_SERVER}"
+                    echo "Pushing frontend image..."
+                    sh "docker push ${DOCKER_IMAGE_FRONTEND}"
+                }
+            }
+        }
 
         stage('Deploy with Docker Compose') {
             steps {
                 echo "Deploying all services with Docker Compose..."
-                sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d"
+                sh "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v ${WORKSPACE}:${WORKSPACE} -w ${WORKSPACE} docker/compose:1.29.2 -f ${DOCKER_COMPOSE_FILE} up -d"
             }
         }
     }
