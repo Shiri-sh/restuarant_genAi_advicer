@@ -49,12 +49,13 @@ module.exports = defineConfig({
   e2e: {
     baseUrl: "http://localhost:3000",
     supportFile: false,
-    specPattern: "cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
+    specPattern: "cypress/e2e/**/*.cy.js",
     video: false,
     screenshotOnRunFailure: true,
   },
 })
 EOF
+                            ls -la cypress/e2e/
                             npx cypress run
                         '
                 '''
