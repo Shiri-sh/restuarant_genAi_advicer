@@ -36,7 +36,7 @@ pipeline {
                 sh '''
                     # Run Cypress - create config inside container
                     docker run --rm \
-                        -v $(pwd)/cypress:/e2e/cypress:ro \
+                        -v $(pwd)/cypress:/e2e/cypress \
                         -w /e2e \
                         --network host \
                         --entrypoint "" \
@@ -49,7 +49,7 @@ module.exports = defineConfig({
   e2e: {
     baseUrl: "http://localhost:3000",
     supportFile: false,
-    specPattern: "cypress/e2e/resuarent_test.cy.js",
+    specPattern: "cypress/e2e/**/*.cy.js",
     video: false,
     screenshotOnRunFailure: true,
   },
