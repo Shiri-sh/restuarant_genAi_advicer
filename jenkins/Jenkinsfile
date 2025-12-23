@@ -46,14 +46,49 @@ pipeline {
             steps {
                 echo "Deploying services..."
                 sh '''
-                    # Stop existing containers
-                    docker-compose down -v || true
+                    # Stop and remove ALL containers with force
+                    docker ps -a --filter "name=restaurant" --format "{{.Names}}" | xargs -r docker stop || true
+                    docker ps -a --filter "name=restaurant" --format "{{.Names}}" | xargs -r docker rm -f || true
                     
-                    # Start services with docker-compose
-                    docker-compose up -d
+                    # Also try specific names
+                    docker stop restaurant-server restaurant-frontend restaurant-mysql server frontend 2>/dev/null || true
+                    docker rm -f restaurant-server restaurant-frontend restaurant-mysql server frontend 2>/dev/null || true
                     
-                    echo "✅ Services started with docker-compose"
-                    docker-compose ps
+                    # Create network if not exists
+                    docker network create restaurant-network || true
+                    
+                    # Start MySQL container
+                    docker run -d --name restaurant-mysql \
+                        --network restaurant-network \
+                        -p ${MYSQL_PORT}:3306 \
+                        -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} \
+                        -e MYSQL_DATABASE=${DATABASE} \
+                        -e MYSQL_USER=${MYSQL_USER} \
+                        -e MYSQL_PASSWORD=${MYSQL_PASSWORD} \
+                        ${DOCKER_IMAGE_MYSQL}
+                    
+                    # Start server container
+                    docker run -d --name restaurant-server \
+                        --network restaurant-network \
+                        -p ${SERVER_PORT}:5000 \
+                        -e MYSQL_HOST=restaurant-mysql \
+                        -e MYSQL_PORT=3306 \
+                        -e MYSQL_USER=${MYSQL_USER} \
+                        -e MYSQL_PASSWORD=${MYSQL_PASSWORD} \
+                        -e MYSQL_DATABASE=${DATABASE} \
+                        ${DOCKER_IMAGE_SERVER}
+                    
+                    # Start frontend container
+                    docker run -d --name restaurant-frontend \
+                        --network restaurant-network \
+                        -p ${FRONTEND_PORT}:3000 \
+                        -e REACT_APP_API_URL=http://localhost:${SERVER_PORT} \
+                        ${DOCKER_IMAGE_FRONTEND}
+                    
+                    echo "✅ MySQL running on http://localhost:${MYSQL_PORT}"
+                    echo "✅ Server running on http://localhost:${SERVER_PORT}"
+                    echo "✅ Frontend running on http://localhost:${FRONTEND_PORT}"
+                    docker ps --filter "name=restaurant"
                 '''
             }
         }
