@@ -4,6 +4,8 @@ pipeline {
     environment {
         DOCKER_IMAGE_SERVER = 'shirish3680/restuarant_genai_advicer-server'
         DOCKER_IMAGE_FRONTEND = 'shirish3680/restuarant_genai_advicer-frontend'
+        SERVER_PORT = '5001'
+        FRONTEND_PORT = '3001'
     }
 
     stages {
@@ -38,19 +40,12 @@ pipeline {
             steps {
                 echo "Deploying services..."
                 sh '''
-                    # Stop and remove old containers
                     docker stop restaurant-server restaurant-frontend || true
                     docker rm restaurant-server restaurant-frontend || true
-                    
-                    # Kill any process using ports 5000 and 3000
-                    docker ps -q --filter "publish=5000" | xargs -r docker stop || true
-                    docker ps -q --filter "publish=3000" | xargs -r docker stop || true
-                    
-                    # Start new containers
-                    docker run -d --name restaurant-server -p 5000:5000 ${DOCKER_IMAGE_SERVER}
-                    docker run -d --name restaurant-frontend -p 3000:3000 ${DOCKER_IMAGE_FRONTEND}
-                    
-                    # Show running containers
+                    docker run -d --name restaurant-server -p ${SERVER_PORT}:5000 ${DOCKER_IMAGE_SERVER}
+                    docker run -d --name restaurant-frontend -p ${FRONTEND_PORT}:3000 ${DOCKER_IMAGE_FRONTEND}
+                    echo "Server running on port ${SERVER_PORT}"
+                    echo "Frontend running on port ${FRONTEND_PORT}"
                     docker ps | grep restaurant
                 '''
             }
