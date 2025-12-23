@@ -40,9 +40,13 @@ pipeline {
             steps {
                 echo "Deploying services..."
                 sh '''
-                    # Stop ALL old containers
-                    docker stop restaurant-server restaurant-frontend server frontend || true
-                    docker rm restaurant-server restaurant-frontend server frontend || true
+                    # Stop and remove ALL containers with force
+                    docker ps -a --filter "name=restaurant" --format "{{.Names}}" | xargs -r docker stop || true
+                    docker ps -a --filter "name=restaurant" --format "{{.Names}}" | xargs -r docker rm -f || true
+                    
+                    # Also try specific names
+                    docker stop restaurant-server restaurant-frontend server frontend 2>/dev/null || true
+                    docker rm -f restaurant-server restaurant-frontend server frontend 2>/dev/null || true
                     
                     # Create network if not exists
                     docker network create restaurant-network || true
