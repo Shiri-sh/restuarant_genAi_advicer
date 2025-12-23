@@ -67,12 +67,15 @@ pipeline {
                         -e MYSQL_DATABASE=${DATABASE} \
                         -e MYSQL_USER=${MYSQL_USER} \
                         -e MYSQL_PASSWORD=${MYSQL_PASSWORD} \
-                        -v $(pwd)/db.sql:/docker-entrypoint-initdb.d/init.sql:ro \
                         ${DOCKER_IMAGE_MYSQL}
                     
                     # Wait for MySQL to be ready
                     echo "Waiting for MySQL to initialize..."
-                    sleep 20
+                    sleep 25
+                    
+                    # Execute SQL script to create tables
+                    echo "Creating database tables..."
+                    docker exec -i restaurant-mysql mysql -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${DATABASE} < db.sql
                     
                     # Start server container
                     docker run -d --name restaurant-server \
