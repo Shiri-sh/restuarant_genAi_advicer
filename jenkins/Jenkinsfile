@@ -4,8 +4,8 @@ pipeline {
     environment {
         DOCKER_IMAGE_SERVER = 'shirish3680/restuarant_genai_advicer-server'
         DOCKER_IMAGE_FRONTEND = 'shirish3680/restuarant_genai_advicer-frontend'
-        SERVER_PORT = '5001'
-        FRONTEND_PORT = '3001'
+        SERVER_PORT = '5000'
+        FRONTEND_PORT = '3000'
     }
 
     stages {
