@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_CREDENTIALS = 'docker-hub-creds'
         DOCKER_IMAGE_SERVER = 'shirish3680/restuarant_genai_advicer-server'
         DOCKER_IMAGE_FRONTEND = 'shirish3680/restuarant_genai_advicer-frontend'
     }
@@ -24,10 +23,13 @@ pipeline {
 
         stage('Push Docker Images') {
             steps {
-                withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh 'echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin'
-                    sh 'docker push ${DOCKER_IMAGE_SERVER}'
-                    sh 'docker push ${DOCKER_IMAGE_FRONTEND}'
+                script {
+                    echo "Skipping push - configure Docker Hub credentials if needed"
+                    // withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    //     sh 'echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin'
+                    //     sh 'docker push ${DOCKER_IMAGE_SERVER}'
+                    //     sh 'docker push ${DOCKER_IMAGE_FRONTEND}'
+                    // }
                 }
             }
         }
@@ -35,14 +37,19 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo "Deploying services..."
-                sh 'docker-compose up -d'
+                sh '''
+                    docker stop restaurant-server restaurant-frontend || true
+                    docker rm restaurant-server restaurant-frontend || true
+                    docker run -d --name restaurant-server -p 5000:5000 ${DOCKER_IMAGE_SERVER}
+                    docker run -d --name restaurant-frontend -p 3000:3000 ${DOCKER_IMAGE_FRONTEND}
+                '''
             }
         }
     }
 
     post {
-        always {
-            sh 'docker-compose down || true'
+        success {
+            echo "Pipeline completed successfully!"
         }
         failure {
             echo "Pipeline failed!"
