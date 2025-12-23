@@ -1,5 +1,5 @@
 import AudioRecorder from "../components/AudioRecorder";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import { sendAudioToServer } from "../services/api";
 
 jest.mock("../services/api", () => ({
@@ -71,10 +71,15 @@ test("does not send audio when cancel is clicked", async () => {
     />
   );
 
-  fireEvent.click(screen.getByTestId("mic-btn"));
+  await act(async () => {
+    fireEvent.click(screen.getByTestId("mic-btn"));
+  });
 
   const cancelBtn = await screen.findByTestId("cancel-btn");
-  fireEvent.click(cancelBtn);
+
+  await act(async () => {
+    fireEvent.click(cancelBtn);
+  });
 
   expect(sendAudioToServer).not.toHaveBeenCalled();
   expect(mockRec).not.toHaveBeenCalled();
@@ -92,20 +97,24 @@ test("sends audio when confirm is clicked", async () => {
     />
   );
 
-  fireEvent.click(screen.getByTestId("mic-btn"));
+  await act(async () => {
+    fireEvent.click(screen.getByTestId("mic-btn"));
+  });
 
   const confirmBtn = await screen.findByTestId("confirm-btn");
 
-  // קודם לוחצים Confirm (זה מפסיק את ההקלטה ומפעיל onstop)
-  fireEvent.click(confirmBtn);
+  await act(async () => {
+    // סימולציה של נתוני אודיו זמינים
+    mediaRecorderInstance.ondataavailable({
+      data: new Blob(["audio"], { type: "audio/webm" })
+    });
 
-  // סימולציה של נתוני אודיו זמינים
-  mediaRecorderInstance.ondataavailable({
-    data: new Blob(["audio"], { type: "audio/webm" })
+    // לחיצה על כפתור אישור
+    fireEvent.click(confirmBtn);
+
+    // הפעלת onstop שמבצעת את הקריאה ל-sendAudioToServer
+    await mediaRecorderInstance.onstop();
   });
-
-  // עכשיו מפעילים onstop ידנית
-  await mediaRecorderInstance.onstop();
 
   expect(sendAudioToServer).toHaveBeenCalledTimes(1);
   expect(mockRec).toHaveBeenCalledWith(["Dish1", "Dish2"]);
