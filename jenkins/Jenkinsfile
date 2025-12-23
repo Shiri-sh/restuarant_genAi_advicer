@@ -33,22 +33,14 @@ pipeline {
         stage('Run Cypress Tests') {
             steps {
                 echo "Running Cypress E2E tests..."
-                script {
-                    // Install Node.js and npm if not exists
-                    sh '''
-                        # Check if node exists, if not install it
-                        if ! command -v node &> /dev/null; then
-                            echo "Installing Node.js..."
-                            curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-                            apt-get install -y nodejs
-                        fi
-                        
-                        # Run Cypress tests
-                        cd cypress
-                        npm install
-                        npx cypress run
-                    '''
-                }
+                sh '''
+                    docker run --rm \
+                        -v $(pwd)/cypress:/e2e \
+                        -w /e2e \
+                        --network host \
+                        node:20-alpine \
+                        sh -c "npm install && npx cypress run"
+                '''
             }
         }
 
