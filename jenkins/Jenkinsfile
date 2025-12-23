@@ -76,7 +76,7 @@ pipeline {
                     
                     # Execute SQL script to create tables
                     echo "Creating database tables..."
-                    docker exec -i restaurant-mysql mysql -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${DATABASE} < db.sql
+                    docker exec -i restaurant-mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD} ${DATABASE} < db.sql
                     
                     # Start server container
                     docker run -d --name restaurant-server \
