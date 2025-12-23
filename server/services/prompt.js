@@ -53,7 +53,7 @@ Requirements:
 - Never return both structures together.
 - Only include dishes that are highly relevant; avoid extra commentary.
 - Keep the reason concise, clear, and actionable.
-- If multiple dishes are suitable, include them all in the list in descending order of relevance, but no more than 5 dishes.
+- If multiple dishes are suitable, include them all in the list in descending order of relevance, but no more than 6 dishes.
 - Do NOT include markdown.
 - Do NOT include explanations, comments, or any text outside the JSON structure.
 - Return ONLY the JSON object, nothing else.
