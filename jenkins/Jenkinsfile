@@ -30,6 +30,16 @@ pipeline {
             }
         }
 
+        stage('Run Cypress Tests') {
+            steps {
+                echo "Running Cypress E2E tests..."
+                sh '''
+                    npm install
+                    npx cypress run
+                '''
+            }
+        }
+
         stage('Push Docker Images') {
             steps {
                 script {
