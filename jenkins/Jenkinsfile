@@ -20,11 +20,7 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 echo "Building Docker images using Docker Compose..."
-                echo "WORKSPACE = ${env.WORKSPACE}"
-                sh "echo 'Files in Jenkins workspace:' && ls -la ${env.WORKSPACE}"
-                sh "echo 'Checking docker-compose.yml:' && file ${env.WORKSPACE}/docker-compose.yml"
-                echo "Running docker-compose inside container..."
-                sh "docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:/workspace -w /workspace docker/compose:1.29.2 sh -c 'echo \"Files in /workspace:\" && ls -la /workspace && echo \"docker-compose.yml exists:\" && file docker-compose.yml && docker-compose -f docker-compose.yml build'"
+                sh "docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:/workspace -w /workspace docker/compose:1.29.2 -f docker-compose.yml build"
             }
         }
         stage('Run Cypress Integration Tests') {
@@ -62,7 +58,7 @@ pipeline {
     post {
         always {
             echo "Cleaning up Docker images and containers..."
-            sh "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:/workspace -w /workspace docker/compose:1.29.2 -f docker-compose.yml down"
+            sh "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:/workspace -w /workspace docker/compose:1.29.2 down || true"
             echo "Pipeline finished."
         }
         failure {
