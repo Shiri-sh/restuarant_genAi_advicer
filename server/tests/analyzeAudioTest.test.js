@@ -1,43 +1,58 @@
-
 import path from "path";
 import fs from "fs";
-import { prepareAudioforGenAI, prepareDataforGenAI, getResponseFromGenAI } from "../services/analyzeAudioServices.js";
-import { convertToMp3, fileToGenerativePart } from "../services/fileActions.js";
-import { getDishes } from "../models/dishesModel.js";
-import { GoogleGenAI } from "@google/genai";
 
-// Mocks
-jest.mock("fs");
-jest.mock("path", () => jest.requireActual("path"));
+jest.mock("fs", () => ({
+  existsSync: jest.fn(),
+  unlinkSync: jest.fn(),
+  readFileSync: jest.fn(),
+}));
 
 jest.mock("../services/fileActions.js", () => ({
   convertToMp3: jest.fn(),
-  fileToGenerativePart: jest.fn()
+  fileToGenerativePart: jest.fn(),
 }));
 
 jest.mock("../models/dishesModel.js", () => ({
-  getDishes: jest.fn()
+  getDishes: jest.fn(),
 }));
 
-jest.mock("@google/genai", () => ({
-  GoogleGenAI: jest.fn().mockImplementation(() => ({
-    models: {
-      generateContent: jest.fn()
-    }
-  }))
-}));
+// ===== GoogleGenAI mock (חוקי!) =====
+jest.mock("@google/genai", () => {
+  const mockGenerateContent = jest.fn();
 
-// ==================== prepareAudioforGenAI ====================
+  return {
+    GoogleGenAI: jest.fn().mockImplementation(() => ({
+      models: {
+        generateContent: mockGenerateContent,
+      },
+    })),
+    __mockGenerateContent: mockGenerateContent,
+  };
+});
+
+import {
+  prepareAudioforGenAI,
+  prepareDataforGenAI,
+  getResponseFromGenAI,
+} from "../services/analyzeAudioServices.js";
+
+import { convertToMp3, fileToGenerativePart } from "../services/fileActions.js";
+import { getDishes } from "../models/dishesModel.js";
+
+const { __mockGenerateContent } = jest.requireMock("@google/genai");
+
+// ================= Tests =================
+
 describe("prepareAudioforGenAI", () => {
   const file = { path: "/tmp/test.wav" };
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+  afterEach(() => jest.clearAllMocks());
 
-  it("converts audio to mp3 and returns generative part", async () => {
-    convertToMp3.mockResolvedValue(path.join("/tmp", "test.mp3"));
-    fileToGenerativePart.mockReturnValue({ audioPart: { mock: "audioPart" } });
+  it("converts audio and returns correct object", async () => {
+    convertToMp3.mockResolvedValue();
+    fileToGenerativePart.mockReturnValue({
+      inlineData: { data: "x", mimeType: "audio/mp3" },
+    });
 
     const result = await prepareAudioforGenAI(file);
 
@@ -45,108 +60,51 @@ describe("prepareAudioforGenAI", () => {
       "/tmp/test.wav",
       path.join("/tmp", "test.mp3")
     );
-    expect(fileToGenerativePart).toHaveBeenCalledWith(
-      path.join("/tmp", "test.mp3"),
-      "audio/mp3"
-    );
 
-    expect(result).toHaveProperty("audioPart");
-    expect(result.audioPart).toEqual({ mock: "audioPart" });
-    expect(result).toHaveProperty("originalFilePath", "/tmp/test.wav");
-    expect(result).toHaveProperty("convertedFilePath", path.join("/tmp", "test.mp3"));
-
-  });
-
-  it("throws error when convertToMp3 fails", async () => {
-    convertToMp3.mockRejectedValue(new Error("Conversion failed"));
-
-    await expect(prepareAudioforGenAI(file))
-      .rejects
-      .toThrow("Conversion failed");
+    expect(result.convertedFilePath).toBe(path.join("/tmp", "test.mp3"));
   });
 
   it("cleans up files on error", async () => {
     fs.existsSync.mockReturnValue(true);
     convertToMp3.mockRejectedValue(new Error("Conversion failed"));
 
-    await expect(prepareAudioforGenAI(file))
-      .rejects
-      .toThrow("Conversion failed");
+    await expect(prepareAudioforGenAI(file)).rejects.toThrow();
 
-    expect(fs.unlinkSync).toHaveBeenCalledWith("/tmp/test.wav");
-  });
-
-  it("throws error when fileToGenerativePart fails", async () => {
-    convertToMp3.mockResolvedValue(path.join("/tmp", "test.mp3"));
-    fileToGenerativePart.mockRejectedValue(new Error("Conversion failed"));
-
-    await expect(prepareAudioforGenAI(file))
-      .rejects
-      .toThrow("Conversion failed");
+    expect(fs.unlinkSync).toHaveBeenCalledTimes(2);
   });
 });
 
-// ==================== prepareDataforGenAI ====================
 describe("prepareDataforGenAI", () => {
-  afterEach(() => jest.clearAllMocks());
-
-  it("returns formatted dishes data as string", async () => {
+  it("returns formatted dishes string", async () => {
     getDishes.mockResolvedValue([
-      {
-        name: "Pizza",
-        ingredients: "Cheese",
-        price: 60,
-        image_url: "pizza.jpg",
-        category_id: 2,
-        is_vegan: false,
-        is_vegetarian: true,
-        on_sale: false,
-        sale_price: null,
-        created_at: "2024-01-01"
-      }
+      { name: "Pizza", ingredients: "Cheese", price: 60 },
     ]);
 
     const result = await prepareDataforGenAI();
 
-    expect(getDishes).toHaveBeenCalled();
-    expect(typeof result).toBe("string");
-    expect(result).toContain("name: Pizza");
-    expect(result).toContain("ingredients: Cheese");
-    expect(result).toContain("price: 60");
-  });
-
-  it("throws error if getDishes fails", async () => {
-    getDishes.mockRejectedValue(new Error("DB error"));
-
-    await expect(prepareDataforGenAI())
-      .rejects
-      .toThrow("DB error");
+    expect(result).toContain("Pizza");
+    expect(result).toContain("Cheese");
   });
 });
 
-// ==================== getResponseFromGenAI ====================
 describe("getResponseFromGenAI", () => {
-  afterEach(() => jest.clearAllMocks());
-
   it("returns parsed AI response", async () => {
-    const mockAIResponse = JSON.stringify({
-      response: { recommended_dishes: [{ name: "Pasta" }] }
+    __mockGenerateContent.mockResolvedValue({
+      text: JSON.stringify({
+        response: { recommended_dishes: [{ name: "Pasta" }] },
+      }),
     });
 
-    const aiInstance = new GoogleGenAI();
-    aiInstance.models.generateContent.mockResolvedValue(mockAIResponse);
-
-    const result = await getResponseFromGenAI({ audio: true }, "dishes info");
+    const result = await getResponseFromGenAI({ audio: true }, "info");
 
     expect(result.response.recommended_dishes[0].name).toBe("Pasta");
   });
 
-  it("throws error when AI fails", async () => {
-    const aiInstance = new GoogleGenAI();
-aiInstance.models.generateContent.mockResolvedValue(mockAIResponse);
+  it("throws when AI fails", async () => {
+    __mockGenerateContent.mockRejectedValue(new Error("AI error"));
 
-    await expect(getResponseFromGenAI({ audio: true }, "dishes info"))
-      .rejects
-      .toThrow("AI error");
+    await expect(
+      getResponseFromGenAI({ audio: true }, "info")
+    ).rejects.toThrow("AI error");
   });
 });

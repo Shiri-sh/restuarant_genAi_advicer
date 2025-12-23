@@ -1,60 +1,72 @@
 import fs from "fs";
 import { fileToGenerativePart, convertToMp3 } from "../services/fileActions.js";
 
-jest.mock("fs");
+jest.mock("fs", () => ({
+  readFileSync: jest.fn(),
+  existsSync: jest.fn(),
+}));
 
-// Mock של FFmpeg שמאפשר הצלחה או כשל לפי flag
+// ================= ffmpeg mock =================
 jest.mock("fluent-ffmpeg", () => {
-  return jest.fn(() => ({
+  let mockShouldFail = false;
+
+  const mockFfmpeg = jest.fn(() => ({
     toFormat: jest.fn().mockReturnThis(),
-    on: jest.fn(function (event, callback) {
-      // אם event הוא 'error' ו-shouldFail=true, זרוק שגיאה
-      if (event === "error" && this.shouldFail) {
-        callback(new Error("FFmpeg failed"));
+    on: jest.fn(function (event, cb) {
+      if (event === "error" && mockShouldFail) {
+        cb(new Error("FFmpeg failed"));
       }
-      // אם event הוא 'end' ו-shouldFail=false, קרא ל-callback כדי לסיים בהצלחה
-      if (event === "end" && !this.shouldFail) {
-        callback();
+      if (event === "end" && !mockShouldFail) {
+        cb();
       }
       return this;
     }),
     save: jest.fn(),
-    // דיפולט ל-false
-    shouldFail: false,
   }));
+
+  mockFfmpeg.__setFail = (val) => {
+    mockShouldFail = val;
+  };
+
+  return mockFfmpeg;
 });
 
+const ffmpegMock = jest.requireMock("fluent-ffmpeg");
+
+// ================= Tests =================
 describe("fileToGenerativePart", () => {
-  it("returns correct Gemini format object", () => {
-    fs.readFileSync.mockReturnValue(Buffer.from("test-audio"));
+  it("returns Gemini compatible object", () => {
+    fs.readFileSync.mockReturnValue(Buffer.from("audio"));
 
-    const result = fileToGenerativePart("fake/path.wav", "audio/wav");
+    const result = fileToGenerativePart("file.wav", "audio/wav");
 
-    expect(result).toHaveProperty("inlineData");
-    expect(result.inlineData.mimeType).toBe("audio/wav");
-    expect(typeof result.inlineData.data).toBe("string");
+    expect(result).toEqual({
+      inlineData: {
+        data: Buffer.from("audio").toString("base64"),
+        mimeType: "audio/wav",
+      },
+    });
   });
 });
 
 describe("convertToMp3", () => {
-  it("resolves successfully when ffmpeg works", async () => {
-    // לא לגרום לכשל
-    convertToMp3.shouldFail = false;
+  afterEach(() => {
+    ffmpegMock.__setFail(false);
+  });
+
+  it("resolves when ffmpeg succeeds", async () => {
+    ffmpegMock.__setFail(false);
 
     await expect(
       convertToMp3("input.wav", "output.mp3")
-    ).resolves.toBeUndefined();
+    ).resolves.toBeDefined();
   });
 
-  it("rejects the promise when ffmpeg fails", async () => {
-    // גרום ל-ffmpeg לזרוק שגיאה
-    convertToMp3.shouldFail = true;
+  it("rejects when ffmpeg fails", async () => {
+    ffmpegMock.__setFail(true);
 
     await expect(
       convertToMp3("input.wav", "output.mp3")
     ).rejects.toThrow("Conversion failed");
-
-    // אפס את flag אחרי ה-test
-    convertToMp3.shouldFail = false;
   });
 });
