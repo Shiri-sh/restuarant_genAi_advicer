@@ -35,11 +35,10 @@ pipeline {
                 echo "Running Cypress E2E tests..."
                 sh '''
                     docker run --rm \
-                        -v $(pwd)/cypress:/e2e \
+                        -v $(pwd):/e2e \
                         -w /e2e \
                         --network host \
-                        node:20-alpine \
-                        sh -c "npm install && npx cypress run"
+                        cypress/included:13.6.2
                 '''
             }
         }
