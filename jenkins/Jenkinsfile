@@ -34,10 +34,7 @@ pipeline {
                   cd cypress
                   npm install
                   npx cypress run
-                '''                cd c:\Users\user\Desktop\Google_Raichman\ofra\restuarant_genAi_advicer
-                git add jenkins/Jenkinsfile
-                git commit -m "Fix docker-compose file path resolution in pipeline"
-                git push origin main
+                '''
             }
         }
 
@@ -57,7 +54,7 @@ pipeline {
         stage('Deploy with Docker Compose') {
             steps {
                 echo "Deploying all services with Docker Compose..."
-                sh "docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:/workspace -w /workspace docker/compose:1.29.2 -f /workspace/${DOCKER_COMPOSE_FILE} up -d"
+                sh "docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:/workspace -w /workspace docker/compose:1.29.2 -f docker-compose.yml up -d"
             }
         }
     }
@@ -65,7 +62,7 @@ pipeline {
     post {
         always {
             echo "Cleaning up Docker images and containers..."
-            sh "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:/workspace -w /workspace docker/compose:1.29.2 -f /workspace/${DOCKER_COMPOSE_FILE} down"
+            sh "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:/workspace -w /workspace docker/compose:1.29.2 -f docker-compose.yml down"
             echo "Pipeline finished."
         }
         failure {
