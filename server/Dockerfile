@@ -20,6 +20,9 @@ RUN npm install --legacy-peer-deps
 # Copy all app files
 COPY . .
 
+# Create uploads directory
+RUN mkdir -p /usr/src/app/uploads
+
 ENV NODE_ENV=development
 EXPOSE 5000
 
