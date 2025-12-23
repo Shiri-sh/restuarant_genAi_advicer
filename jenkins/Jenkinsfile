@@ -33,7 +33,7 @@ pipeline {
         stage('Push Docker Images') {
             steps {
                 script {
-                    echo "Skipping push - configure Docker Hub credentials if needed"
+                    echo "Skipping push  - configure Docker Hub credentials if needed"
                     // withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     //     sh 'echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin'
                     //     sh 'docker push ${DOCKER_IMAGE_SERVER}'
