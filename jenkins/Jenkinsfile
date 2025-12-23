@@ -46,16 +46,18 @@ pipeline {
             steps {
                 echo "Deploying services..."
                 sh '''
-                    # Stop and remove ALL containers with force
+                    # Stop and remove ALL containers
                     docker ps -a --filter "name=restaurant" --format "{{.Names}}" | xargs -r docker stop || true
                     docker ps -a --filter "name=restaurant" --format "{{.Names}}" | xargs -r docker rm -f || true
+                    docker stop restaurant-server restaurant-frontend restaurant-mysql server frontend mysql 2>/dev/null || true
+                    docker rm -f restaurant-server restaurant-frontend restaurant-mysql server frontend mysql 2>/dev/null || true
                     
-                    # Also try specific names
-                    docker stop restaurant-server restaurant-frontend restaurant-mysql server frontend 2>/dev/null || true
-                    docker rm -f restaurant-server restaurant-frontend restaurant-mysql server frontend 2>/dev/null || true
+                    # Remove MySQL volumes to ensure fresh database
+                    docker volume ls -q | grep -i mysql | xargs -r docker volume rm 2>/dev/null || true
+                    docker volume rm restuarant_genai_advicer_tamara_data 2>/dev/null || true
                     
-                    # Create network if not exists
-                    docker network create restaurant-network || true
+                    # Create network
+                    docker network create restaurant-network 2>/dev/null || true
                     
                     # Start MySQL container
                     docker run -d --name restaurant-mysql \
@@ -67,6 +69,10 @@ pipeline {
                         -e MYSQL_PASSWORD=${MYSQL_PASSWORD} \
                         -v $(pwd)/db.sql:/docker-entrypoint-initdb.d/init.sql:ro \
                         ${DOCKER_IMAGE_MYSQL}
+                    
+                    # Wait for MySQL to be ready
+                    echo "Waiting for MySQL to initialize..."
+                    sleep 20
                     
                     # Start server container
                     docker run -d --name restaurant-server \
