@@ -5,28 +5,46 @@ import { sendAudioToServer } from "../services/api";
 jest.mock("../services/api", () => ({
   sendAudioToServer: jest.fn()
 }));
-// ב AudioRecorder.test.js או ב setupTests.js
-global.AudioContext = class {
-  constructor() {}
-  createMediaStreamSource() { return {}; }
-  createScriptProcessor() { return {}; }
-  // אפשר להוסיף שיטות נוספות אם הקומפוננטה שלך קוראת להן
-};
 
+// Mock AudioContext & Analyser
+beforeAll(() => {
+  class MockAnalyser {
+    constructor() {
+      this.fftSize = 512;
+      this.smoothingTimeConstant = 0.7;
+      this.frequencyBinCount = 512;
+    }
+    getByteFrequencyData(array) {
+      array.fill(20); // ערך דיפולטיבי
+    }
+  }
+
+  class MockAudioContext {
+    createAnalyser() {
+      return new MockAnalyser();
+    }
+    createMediaStreamSource() {
+      return { connect: () => {} };
+    }
+    close() {
+      return Promise.resolve();
+    }
+  }
+
+  window.AudioContext = MockAudioContext;
+  window.webkitAudioContext = MockAudioContext;
+});
+
+// Mock getUserMedia
 global.navigator.mediaDevices = {
   getUserMedia: jest.fn().mockResolvedValue({
     getTracks: () => [{ stop: jest.fn() }]
-  }),
+  })
 };
-
 
 let mediaRecorderInstance;
 
 beforeEach(() => {
-  navigator.mediaDevices = {
-    getUserMedia: jest.fn().mockResolvedValue({})
-  };
-
   global.MediaRecorder = jest.fn(() => {
     mediaRecorderInstance = {
       start: jest.fn(),
@@ -37,10 +55,21 @@ beforeEach(() => {
     return mediaRecorderInstance;
   });
 
-  sendAudioToServer.mockResolvedValue([]);
+  sendAudioToServer.mockResolvedValue({
+    recommended_dishes: ["Dish1", "Dish2"]
+  });
 });
+
 test("does not send audio when cancel is clicked", async () => {
-  render(<AudioRecorder onResult={jest.fn()} />);
+  const mockNoRec = jest.fn();
+  const mockRec = jest.fn();
+
+  render(
+    <AudioRecorder
+      onResultRecommendations={mockRec}
+      onResultNoRecommendations={mockNoRec}
+    />
+  );
 
   fireEvent.click(screen.getByTestId("mic-btn"));
 
@@ -48,22 +77,36 @@ test("does not send audio when cancel is clicked", async () => {
   fireEvent.click(cancelBtn);
 
   expect(sendAudioToServer).not.toHaveBeenCalled();
+  expect(mockRec).not.toHaveBeenCalled();
+  expect(mockNoRec).not.toHaveBeenCalled();
 });
 
 test("sends audio when confirm is clicked", async () => {
-  render(<AudioRecorder onResult={jest.fn()} />);
+  const mockNoRec = jest.fn();
+  const mockRec = jest.fn();
+
+  render(
+    <AudioRecorder
+      onResultRecommendations={mockRec}
+      onResultNoRecommendations={mockNoRec}
+    />
+  );
 
   fireEvent.click(screen.getByTestId("mic-btn"));
 
   const confirmBtn = await screen.findByTestId("confirm-btn");
 
+  // קודם לוחצים Confirm (זה מפסיק את ההקלטה ומפעיל onstop)
+  fireEvent.click(confirmBtn);
+
+  // סימולציה של נתוני אודיו זמינים
   mediaRecorderInstance.ondataavailable({
     data: new Blob(["audio"], { type: "audio/webm" })
   });
 
-  fireEvent.click(confirmBtn);
-
+  // עכשיו מפעילים onstop ידנית
   await mediaRecorderInstance.onstop();
 
   expect(sendAudioToServer).toHaveBeenCalledTimes(1);
+  expect(mockRec).toHaveBeenCalledWith(["Dish1", "Dish2"]);
 });
