@@ -9,17 +9,6 @@ pipeline {
     }
 
     stages {
-        stage('Check OS') {
-            steps {
-                script {
-                    if (isUnix()) {
-                        echo "Running on Linux/Unix"
-                    } else {
-                        echo "Running on Windows"
-                    }
-                }
-            }
-        }
 
         stage('Checkout') {
             steps {
@@ -30,7 +19,7 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 echo "Building Docker images using Docker Compose..."
-                sh "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v ${WORKSPACE}:${WORKSPACE} -w ${WORKSPACE} docker/compose:1.29.2 -f ${DOCKER_COMPOSE_FILE} build"
+                sh "docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:${env.WORKSPACE} -w ${env.WORKSPACE} docker/compose:1.29.2 -f ${DOCKER_COMPOSE_FILE} build"
             }
         }
         stage('Run Cypress Integration Tests') {
@@ -60,13 +49,15 @@ pipeline {
         stage('Deploy with Docker Compose') {
             steps {
                 echo "Deploying all services with Docker Compose..."
-                sh "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v ${WORKSPACE}:${WORKSPACE} -w ${WORKSPACE} docker/compose:1.29.2 -f ${DOCKER_COMPOSE_FILE} up -d"
+                sh "docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:${env.WORKSPACE} -w ${env.WORKSPACE} docker/compose:1.29.2 -f ${DOCKER_COMPOSE_FILE} up -d"
             }
         }
     }
 
     post {
         always {
+            echo "Cleaning up Docker images and containers..."
+            sh "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -w ${env.WORKSPACE} docker/compose:1.29.2 -f ${DOCKER_COMPOSE_FILE} down"
             echo "Pipeline finished."
         }
         failure {
