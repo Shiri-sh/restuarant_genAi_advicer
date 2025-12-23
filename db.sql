@@ -95,6 +95,30 @@ INSERT INTO dishes (
 ('Dreamy skewers', 52.00, '/images/dishes/dreamy_skewers.png',
  'Crispy fingers of halloumi cheese, drizzled with teriyaki sauce.',
  1, FALSE, TRUE, TRUE, FALSE, NULL),
+--specials
+('Portobello Mushrooms', 76.00, NULL,
+ 'Fresh mushrooms stuffed with a blend of 4 cheeses, crispy coating. Served with creamy sweet potato mash, soy sauce.',
+ 9, FALSE, TRUE, TRUE, TRUE, 70.00),
+
+('Chestnut Sweet Potato Gnocchi', 72.00, NULL,
+ 'Gnocchi in cream sauce with mushrooms, parmesan cheese and roasted chestnuts.',
+ 9, FALSE, TRUE, TRUE, FALSE, NULL),
+
+('Calzone', 69.00, NULL,
+ 'Italian baked pastry filled with cream cheese, forest mushrooms, onion, spinach, mozzarella and cheese.',
+ 9, FALSE, TRUE, TRUE, TRUE, 65.00),
+
+('Artichoke Ravioli', 69.00, NULL,
+ 'Italian pasta filled with artichokes and cheeses, served in buttery sauce with cherry tomatoes, Kalamata olives, red onion, basil.',
+ 9, FALSE, TRUE, TRUE, FALSE, NULL),
+
+('Mushroom Risotto', 74.00, NULL,
+ 'Winter rice dish with forest mushrooms in butter, parmesan, fresh parsley and touches of truffle oil.',
+ 9, FALSE, TRUE, TRUE, TRUE, 69.00),
+
+('Beetroot Gnocchi', 72.00, NULL,
+ 'Sautéed sweet potato gnocchi in garlic butter, served in local beetroot sauce with Italian feta cheese.',
+ 9, FALSE, TRUE, TRUE, FALSE, NULL),
 
 -- Breakfast
 ('Tamara Double Morning', 152.00, NULL,
@@ -122,6 +146,18 @@ INSERT INTO dishes (
 ('Penna Wild Mushroom Cream', 66.00, NULL,
  'Mushrooms, garlic, chard, Parmesan cream and a touch of wine.',
  6, FALSE, TRUE, TRUE, FALSE, NULL),
+ ('Fettuccine Rosa', 68.00, NULL,
+ 'Tomato cream sauce with basil leaves and parmesan cheese.',
+ 6, FALSE, TRUE, TRUE, TRUE, 64.00),
+
+('Ballerina Tomato & Olives', 62.00, NULL,
+ 'Whole wheat pasta in ripe tomato sauce, basil, garlic and Kalamata olives.',
+ 6, TRUE, TRUE, TRUE, FALSE, NULL),
+
+('Tamara Ravioli', 76.00, NULL,
+ 'Goat cheese ravioli with green onion, in a creamy parmesan sauce with lemon.',
+ 6, FALSE, TRUE, TRUE, TRUE, 72.00),
+
 
 -- Desserts
 ('Lemon pistachio bar', 53.00, NULL,
@@ -130,6 +166,14 @@ INSERT INTO dishes (
 ('New York cheesecake', 53.00, NULL,
  'Homemade cheesecake with vanilla cream.',
  11, FALSE, TRUE, TRUE, FALSE, NULL),
+ ('Upside-down Apple Pie', 53.00, NULL,
+ 'Baked apple slices on a crispy pastry base, drizzled with salted caramel sauce.',
+ 11, FALSE, TRUE, TRUE, FALSE, NULL),
+
+('French Tiramisu', 53.00, NULL,
+ 'Layers of espresso-soaked biscuits, mascarpone cream, coffee, decorated with cocoa.',
+ 11, FALSE, TRUE, TRUE, FALSE, NULL),
+
 
 -- Pizzas
 ('Pizza Emilia', 59.00, NULL,
@@ -145,7 +189,20 @@ INSERT INTO dishes (
  8, FALSE, TRUE, TRUE, TRUE, 60.00),
 ('Greek Piraeus Salad', 59.00, NULL,
  'Lettuce mix, zaatar, olive oil, cherry tomatoes, cucumbers, olives and red onion.',
- 8, TRUE, TRUE, TRUE, FALSE, NULL);
+ 8, TRUE, TRUE, TRUE, FALSE, NULL),
+ ('Health Salad', 66.00, NULL,
+ 'Bulgur, black lentils, green mix, roasted sweet potato cubes, red onion, cashews, low-fat Bulgarian cheese cubes.',
+ 8, TRUE, TRUE, TRUE, TRUE, 62.00),
+
+('Tamara Salad', 78.00, NULL,
+ 'Colorful lettuce mix, cherry tomatoes, roasted peppers, red onion, Kalamata olives, carrot, fried goat cheese.',
+ 8, FALSE, TRUE, TRUE, FALSE, NULL),
+
+('Toast Salad', 74.00, NULL,
+ 'Toasted cubes sautéed in garlic butter, filled with mozzarella and pesto, on a bed of lettuce leaves with aioli dressing.',
+ 8, FALSE, TRUE, TRUE, TRUE, 70.00);
+
+
 
 -- update_url_pic.sql
 -- USE TamaraResDB;
@@ -213,3 +270,24 @@ WHERE name='Sweet potato and walnut salad';
 UPDATE dishes 
 SET image_url='/images/dishes/greek_piraeus_salad.png' 
 WHERE name='Greek Piraeus Salad';
+-- Specials
+UPDATE dishes SET image_url='/images/dishes/portobello_mushrooms.jpg' WHERE name='Portobello Mushrooms';
+UPDATE dishes SET image_url='/images/dishes/chestnut_sweet_potato_gnocchi.jpg' WHERE name='Chestnut Sweet Potato Gnocchi';
+UPDATE dishes SET image_url='/images/dishes/calzone.jpg' WHERE name='Calzone';
+UPDATE dishes SET image_url='/images/dishes/artichoke_ravioli.jpg' WHERE name='Artichoke Ravioli';
+UPDATE dishes SET image_url='/images/dishes/mushroom_risotto.jpg' WHERE name='Mushroom Risotto';
+UPDATE dishes SET image_url='/images/dishes/beetroot_gnocchi.jpg' WHERE name='Beetroot Gnocchi';
+
+-- Pastas
+UPDATE dishes SET image_url='/images/dishes/fettuccine_rosa.jpg' WHERE name='Fettuccine Rosa';
+UPDATE dishes SET image_url='/images/dishes/ballerina_tomato_olives.jpg' WHERE name='Ballerina Tomato & Olives';
+UPDATE dishes SET image_url='/images/dishes/tamara_ravioli.jpg' WHERE name='Tamara Ravioli';
+
+-- Salads
+UPDATE dishes SET image_url='/images/dishes/health_salad.jpg' WHERE name='Health Salad';
+UPDATE dishes SET image_url='/images/dishes/tamara_salad.jpg' WHERE name='Tamara Salad';
+UPDATE dishes SET image_url='/images/dishes/toast_salad.jpg' WHERE name='Toast Salad';
+
+-- Desserts
+UPDATE dishes SET image_url='/images/dishes/upside_down_apple_pie.jpg' WHERE name='Upside-down Apple Pie';
+UPDATE dishes SET image_url='/images/dishes/french_tiramisu.jpg' WHERE name='French Tiramisu';
