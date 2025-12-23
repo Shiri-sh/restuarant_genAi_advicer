@@ -44,7 +44,7 @@ pipeline {
                 sh '''
                     # Load environment variables from .env file
                     set -a
-                    source jenkins/.env
+                    . jenkins/.env
                     set +a
                     
                     # Stop and remove ALL containers
