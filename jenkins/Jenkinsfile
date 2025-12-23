@@ -8,10 +8,6 @@ pipeline {
         FRONTEND_PORT = '3000'
         MYSQL_PORT = '3307'
         DOCKER_IMAGE_MYSQL = 'mysql:8.0'
-        DATABASE='TamaraResDB'
-        MYSQL_USER='tamara'
-        MYSQL_PASSWORD='tamara123'
-        MYSQL_ROOT_PASSWORD = 'YourPassword123'
     }
 
     stages {
@@ -46,6 +42,11 @@ pipeline {
             steps {
                 echo "Deploying services..."
                 sh '''
+                    # Load environment variables from .env file
+                    set -a
+                    source jenkins/.env
+                    set +a
+                    
                     # Stop and remove ALL containers
                     docker ps -a --filter "name=restaurant" --format "{{.Names}}" | xargs -r docker stop || true
                     docker ps -a --filter "name=restaurant" --format "{{.Names}}" | xargs -r docker rm -f || true
@@ -86,6 +87,7 @@ pipeline {
                         -e MYSQL_USER=${MYSQL_USER} \
                         -e MYSQL_PASSWORD=${MYSQL_PASSWORD} \
                         -e MYSQL_DATABASE=${DATABASE} \
+                        -e GENAI_API_KEY=${GENAI_API_KEY} \
                         ${DOCKER_IMAGE_SERVER}
                     
                     # Start frontend container
