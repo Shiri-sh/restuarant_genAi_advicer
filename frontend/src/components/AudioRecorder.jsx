@@ -77,7 +77,7 @@ export default function AudioRecorder({ onResultRecommendations,onResultNoRecomm
 
       animate();
     } catch (err) {
-      console.error("Cannot access microphone:", err);
+      console.log("Cannot access microphone:", err);
     }
   };
 

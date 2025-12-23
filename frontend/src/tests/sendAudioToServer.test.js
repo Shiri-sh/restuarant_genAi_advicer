@@ -9,7 +9,9 @@ describe("sendAudioToServer", () => {
 
     //דימוי-תשובה-מהשרת
     const fakeResponse = {
-      recommended_dishes: ["Pizza", "Pasta"]
+      response: {
+        recommended_dishes: ["Pizza", "Pasta"]
+      }
     };
 
     //קריאה-לפטצ'-תחזיר-דימוי-של-ג'יסון

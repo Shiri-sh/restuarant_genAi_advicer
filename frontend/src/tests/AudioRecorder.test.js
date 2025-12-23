@@ -5,6 +5,20 @@ import { sendAudioToServer } from "../services/api";
 jest.mock("../services/api", () => ({
   sendAudioToServer: jest.fn()
 }));
+// ב AudioRecorder.test.js או ב setupTests.js
+global.AudioContext = class {
+  constructor() {}
+  createMediaStreamSource() { return {}; }
+  createScriptProcessor() { return {}; }
+  // אפשר להוסיף שיטות נוספות אם הקומפוננטה שלך קוראת להן
+};
+
+global.navigator.mediaDevices = {
+  getUserMedia: jest.fn().mockResolvedValue({
+    getTracks: () => [{ stop: jest.fn() }]
+  }),
+};
+
 
 let mediaRecorderInstance;
 
@@ -25,7 +39,6 @@ beforeEach(() => {
 
   sendAudioToServer.mockResolvedValue([]);
 });
-
 test("does not send audio when cancel is clicked", async () => {
   render(<AudioRecorder onResult={jest.fn()} />);
 
