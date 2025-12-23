@@ -20,7 +20,7 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 echo "Building Docker images using Docker Compose..."
-                sh "docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:/workspace -w /workspace docker/compose:1.29.2 -f docker-compose.yml build"
+                sh "docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:/workspace -w /workspace docker/compose:1.29.2 docker-compose -f docker-compose.yml build"
             }
         }
         stage('Run Cypress Integration Tests') {
@@ -50,7 +50,7 @@ pipeline {
         stage('Deploy with Docker Compose') {
             steps {
                 echo "Deploying all services with Docker Compose..."
-                sh "docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:/workspace -w /workspace docker/compose:1.29.2 -f docker-compose.yml up -d"
+                sh "docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:/workspace -w /workspace docker/compose:1.29.2 docker-compose -f docker-compose.yml up -d"
             }
         }
     }
@@ -58,7 +58,7 @@ pipeline {
     post {
         always {
             echo "Cleaning up Docker images and containers..."
-            sh "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:/workspace -w /workspace docker/compose:1.29.2 down || true"
+            sh "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v ${env.WORKSPACE}:/workspace -w /workspace docker/compose:1.29.2 docker-compose -f docker-compose.yml down || true"
             echo "Pipeline finished."
         }
         failure {
