@@ -12,6 +12,7 @@ pipeline {
         MYSQL_USER = 'tamara'
         MYSQL_PASSWORD = 'tamara123'
         MYSQL_ROOT_PASSWORD = 'YourPassword123'
+        GENAI_API_KEY = credentials('genai-api-key2')
     }
 
     stages {
@@ -45,64 +46,62 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo "Deploying services..."
-                withCredentials([string(credentialsId: 'genai-api-key', variable: 'GENAI_API_KEY')]) {
-                    sh '''
-                        # Stop and remove ALL containers
-                        docker ps -a --filter "name=restaurant" --format "{{.Names}}" | xargs -r docker stop || true
-                        docker ps -a --filter "name=restaurant" --format "{{.Names}}" | xargs -r docker rm -f || true
-                        docker stop restaurant-server restaurant-frontend restaurant-mysql server frontend mysql 2>/dev/null || true
-                        docker rm -f restaurant-server restaurant-frontend restaurant-mysql server frontend mysql 2>/dev/null || true
-                        
-                        # Remove MySQL volumes to ensure fresh database
-                        docker volume ls -q | grep -i mysql | xargs -r docker volume rm 2>/dev/null || true
-                        docker volume rm restuarant_genai_advicer_tamara_data 2>/dev/null || true
-                        
-                        # Create network
-                        docker network create restaurant-network 2>/dev/null || true
-                        
-                        # Start MySQL container
-                        docker run -d --name restaurant-mysql \
-                            --network restaurant-network \
-                            -p ${MYSQL_PORT}:3306 \
-                            -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} \
-                            -e MYSQL_DATABASE=${DATABASE} \
-                            -e MYSQL_USER=${MYSQL_USER} \
-                            -e MYSQL_PASSWORD=${MYSQL_PASSWORD} \
-                            ${DOCKER_IMAGE_MYSQL}
-                        
-                        # Wait for MySQL to be ready
-                        echo "Waiting for MySQL to initialize..."
-                        sleep 25
-                        
-                        # Execute SQL script to create tables
-                        echo "Creating database tables..."
-                        docker exec -i restaurant-mysql mysql -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${DATABASE} < db.sql
-                        
-                        # Start server container
-                        docker run -d --name restaurant-server \
-                            --network restaurant-network \
-                            -p ${SERVER_PORT}:5000 \
-                            -e MYSQL_HOST=restaurant-mysql \
-                            -e MYSQL_PORT=3306 \
-                            -e MYSQL_USER=${MYSQL_USER} \
-                            -e MYSQL_PASSWORD=${MYSQL_PASSWORD} \
-                            -e MYSQL_DATABASE=${DATABASE} \
-                            -e GENAI_API_KEY=${GENAI_API_KEY} \
-                            ${DOCKER_IMAGE_SERVER}
-                        
-                        # Start frontend container
-                        docker run -d --name restaurant-frontend \
-                            --network restaurant-network \
-                            -p ${FRONTEND_PORT}:3000 \
-                            -e REACT_APP_API_URL=http://localhost:${SERVER_PORT} \
-                            ${DOCKER_IMAGE_FRONTEND}
-                        
-                        echo "✅ MySQL running on http://localhost:${MYSQL_PORT}"
-                        echo "✅ Server running on http://localhost:${SERVER_PORT}"
-                        echo "✅ Frontend running on http://localhost:${FRONTEND_PORT}"
-                        docker ps --filter "name=restaurant"
-                    '''
-                }
+                sh '''
+                    # Stop and remove ALL containers
+                    docker ps -a --filter "name=restaurant" --format "{{.Names}}" | xargs -r docker stop || true
+                    docker ps -a --filter "name=restaurant" --format "{{.Names}}" | xargs -r docker rm -f || true
+                    docker stop restaurant-server restaurant-frontend restaurant-mysql server frontend mysql 2>/dev/null || true
+                    docker rm -f restaurant-server restaurant-frontend restaurant-mysql server frontend mysql 2>/dev/null || true
+                    
+                    # Remove MySQL volumes to ensure fresh database
+                    docker volume ls -q | grep -i mysql | xargs -r docker volume rm 2>/dev/null || true
+                    docker volume rm restuarant_genai_advicer_tamara_data 2>/dev/null || true
+                    
+                    # Create network
+                    docker network create restaurant-network 2>/dev/null || true
+                    
+                    # Start MySQL container
+                    docker run -d --name restaurant-mysql \
+                        --network restaurant-network \
+                        -p ${MYSQL_PORT}:3306 \
+                        -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} \
+                        -e MYSQL_DATABASE=${DATABASE} \
+                        -e MYSQL_USER=${MYSQL_USER} \
+                        -e MYSQL_PASSWORD=${MYSQL_PASSWORD} \
+                        ${DOCKER_IMAGE_MYSQL}
+                    
+                    # Wait for MySQL to be ready
+                    echo "Waiting for MySQL to initialize..."
+                    sleep 25
+                    
+                    # Execute SQL script to create tables
+                    echo "Creating database tables..."
+                    docker exec -i restaurant-mysql mysql -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${DATABASE} < db.sql
+                    
+                    # Start server container
+                    docker run -d --name restaurant-server \
+                        --network restaurant-network \
+                        -p ${SERVER_PORT}:5000 \
+                        -e MYSQL_HOST=restaurant-mysql \
+                        -e MYSQL_PORT=3306 \
+                        -e MYSQL_USER=${MYSQL_USER} \
+                        -e MYSQL_PASSWORD=${MYSQL_PASSWORD} \
+                        -e MYSQL_DATABASE=${DATABASE} \
+                        -e GENAI_API_KEY=${GENAI_API_KEY} \
+                        ${DOCKER_IMAGE_SERVER}
+                    
+                    # Start frontend container
+                    docker run -d --name restaurant-frontend \
+                        --network restaurant-network \
+                        -p ${FRONTEND_PORT}:3000 \
+                        -e REACT_APP_API_URL=http://localhost:${SERVER_PORT} \
+                        ${DOCKER_IMAGE_FRONTEND}
+                    
+                    echo "✅ MySQL running on http://localhost:${MYSQL_PORT}"
+                    echo "✅ Server running on http://localhost:${SERVER_PORT}"
+                    echo "✅ Frontend running on http://localhost:${FRONTEND_PORT}"
+                    docker ps --filter "name=restaurant"
+                '''
             }
         }
     }
