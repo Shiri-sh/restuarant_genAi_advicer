@@ -34,7 +34,10 @@ pipeline {
                   cd cypress
                   npm install
                   npx cypress run
-                '''
+                '''                cd c:\Users\user\Desktop\Google_Raichman\ofra\restuarant_genAi_advicer
+                git add jenkins/Jenkinsfile
+                git commit -m "Fix docker-compose file path resolution in pipeline"
+                git push origin main
             }
         }
 
