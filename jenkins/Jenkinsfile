@@ -90,6 +90,11 @@ pipeline {
                         -e GENAI_API_KEY=${GENAI_API_KEY} \
                         ${DOCKER_IMAGE_SERVER}
                     
+                    # Wait a moment and check server logs
+                    sleep 3
+                    echo "Server logs:"
+                    docker logs restaurant-server || true
+                    
                     # Start frontend container
                     docker run -d --name restaurant-frontend \
                         --network restaurant-network \
