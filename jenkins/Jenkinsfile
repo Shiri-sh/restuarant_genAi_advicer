@@ -34,18 +34,29 @@ pipeline {
             steps {
                 echo "Running Cypress E2E tests..."
                 sh '''
-                    # Verify files exist
-                    echo "Files in workspace:"
-                    ls -la cypress.config.js cypress/
-                    
-                    # Run Cypress with explicit config file
+                    # Run Cypress - create config inside container
                     docker run --rm \
-                        -v $(pwd):/e2e \
+                        -v $(pwd)/cypress:/e2e/cypress:ro \
                         -w /e2e \
                         --network host \
                         --entrypoint "" \
                         cypress/included:13.6.2 \
-                        sh -c "ls -la && npx cypress run --config-file cypress.config.js"
+                        sh -c '
+                            cat > cypress.config.js << "EOF"
+const { defineConfig } = require("cypress")
+
+module.exports = defineConfig({
+  e2e: {
+    baseUrl: "http://localhost:3000",
+    supportFile: "cypress/support/e2e.js",
+    specPattern: "cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
+    video: false,
+    screenshotOnRunFailure: true,
+  },
+})
+EOF
+                            npx cypress run
+                        '
                 '''
             }
         }
