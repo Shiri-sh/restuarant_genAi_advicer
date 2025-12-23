@@ -38,10 +38,20 @@ pipeline {
             steps {
                 echo "Deploying services..."
                 sh '''
+                    # Stop and remove old containers
                     docker stop restaurant-server restaurant-frontend || true
                     docker rm restaurant-server restaurant-frontend || true
+                    
+                    # Kill any process using ports 5000 and 3000
+                    docker ps -q --filter "publish=5000" | xargs -r docker stop || true
+                    docker ps -q --filter "publish=3000" | xargs -r docker stop || true
+                    
+                    # Start new containers
                     docker run -d --name restaurant-server -p 5000:5000 ${DOCKER_IMAGE_SERVER}
                     docker run -d --name restaurant-frontend -p 3000:3000 ${DOCKER_IMAGE_FRONTEND}
+                    
+                    # Show running containers
+                    docker ps | grep restaurant
                 '''
             }
         }
