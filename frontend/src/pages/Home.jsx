@@ -23,10 +23,14 @@ export default function Home() {
         </div>
         <div className="header-content">
           <div className="brand">
-            <h3 className="brand-name">TAMARA</h3>
-            <span className="brand-subtitle">cafe & restaurant</span>
+            <h1 className="brand-name">
+              <span className="letter-w">W</span>
+              <span className="ai-highlight">AI</span>
+              <span className="letter-rest">TER</span>
+            </h1>
+            <div className="brand-accent-line"></div>
           </div>
-          <h1 className="home-title">The Restaurant that Understands You</h1>
+          <h1 className="home-title">The Waiter That Listens To You</h1>
           <p className="home-subtitle">
             Speak your cravings and get smart dish recommendations instantly!
           </p>

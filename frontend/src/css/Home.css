@@ -1,6 +1,7 @@
 /* ====================================================================
    0. CSS Variables / Global Colors
 ==================================================================== */
+
 :root {
   /* Base Colors */
   --color-bg-light: #FAFAFA;
@@ -8,12 +9,12 @@
   --color-bg-white: #FFFFFF;
   --color-text-primary: #333333;
   --color-text-secondary: #666666;
-  
+
   /* Accent Colors */
   --color-accent-primary: #E8505B;    /* אדום-ורוד עיקרי */
-  --color-accent-light: #FFB9B2;      /* ורוד בהיר */
-  --color-accent-dark: #C7455C;       /* אדום כהה */
-  
+   --color-accent-light: #FFB9B2;   
+  --color-accent-dark: #C7455C;     
+
   /* Neutrals */
   --color-gray-100: #F5F5F5;
   --color-gray-200: #E0E0E0;
@@ -25,11 +26,16 @@
   --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
   --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.15);
   --shadow-text: 2px 2px 12px rgba(0, 0, 0, 0.4);
+  
+  /* Gradient for AI highlight */
+  --gradient-ai: linear-gradient(135deg, #a10000 0%, #d1392b 50%, #FFB9B2 100%);
+  
+  /* Glow colors for animations */
+  /* --glow-primary: rgba(255, 255, 255, 0.6);
+  --glow-light: rgba(255, 255, 255, 0.8); */
 }
 
-/* ====================================================================
-   I. Layout & Page Structure
-==================================================================== */
+
 * {
   margin: 0;
   padding: 0;
@@ -124,6 +130,12 @@
 }
 
 /* Content Over Slider */
+
+
+/* ============================================
+   CSS CODE - העיצוב המעודכן עם צבעי אדום/כתום
+   ============================================ */
+
 .header-content {
   position: relative;
   z-index: 2;
@@ -134,67 +146,196 @@
   animation: fadeInUp 1s ease-out;
 }
 
-/* Brand Section */
+/* Brand Section - הלוגו המרכזי */
 .brand {
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
+  position: relative;
 }
 
 .brand-name {
-  font-size: clamp(3rem, 6vw, 5rem);
-  font-weight: 300;
-  letter-spacing: 0.25em;
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  font-weight: 900;
   margin: 0;
-  color: var(--color-bg-white);
-  text-shadow: var(--shadow-text);
-  font-family: 'Playfair Display', Georgia, serif;
+  padding: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1em;
+  font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+  letter-spacing: -0.02em;
   position: relative;
-  display: inline-block;
 }
 
-.brand-name::after {
+/* האות W */
+.letter-w {
+  color: var(--color-bg-white);
+  text-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.5),
+    0 0 40px rgba(255, 255, 255, 0.3),
+    2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-weight: 900;
+  transition: all 0.3s ease;
+}
+
+.letter-w:hover {
+  transform: scale(1.05);
+  text-shadow: 
+    0 0 30px rgba(255, 255, 255, 0.8),
+    0 0 60px rgba(255, 255, 255, 0.5);
+}
+
+/* הדגשת AI - הכוכב של השם בצבעי אדום/כתום */
+.ai-highlight {
+  background: var(--gradient-ai);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 900;
+  position: relative;
+  padding: 0 0.15em;
+  animation: glow 2s ease-in-out infinite alternate;
+  text-shadow: none;
+  filter: drop-shadow(0 0 20px var(--glow-primary));
+}
+
+@keyframes glow {
+  from {
+    filter: drop-shadow(0 0 20px var(--glow-primary));
+  }
+  to {
+    filter: drop-shadow(0 0 30px var(--glow-light));
+  }
+}
+
+/* רקע מאחורי AI */
+.ai-highlight::before {
   content: '';
   position: absolute;
-  bottom: -10px;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 2px;
-  background: var(--color-accent-primary);
-  box-shadow: 0 0 10px var(--color-accent-primary);
+  transform: translate(-50%, -50%);
+  width: 110%;
+  height: 110%;
+  background: linear-gradient(135deg, 
+    rgba(232, 80, 91, 0.2), 
+    rgba(255, 138, 128, 0.2)
+  );
+  border-radius: 15px;
+  z-index: -1;
+  box-shadow: 
+    0 0 40px var(--glow-primary),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
-.brand-subtitle {
-  display: block;
-  margin-top: 1.2rem;
-  font-size: clamp(0.75rem, 1.5vw, 0.95rem);
-  letter-spacing: 0.4em;
-  text-transform: uppercase;
-  color: var(--color-accent-light);
-  font-weight: 300;
-  text-shadow: var(--shadow-text);
+/* שאר האותיות TER */
+.letter-rest {
+  color: var(--color-bg-white);
+  text-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.5),
+    0 0 40px rgba(255, 255, 255, 0.3),
+    2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-weight: 900;
+  transition: all 0.3s ease;
+}
+
+.letter-rest:hover {
+  transform: scale(1.05);
+}
+
+/* הקו המעוצב מתחת ללוגו בצבעי אדום/כתום */
+.brand-accent-line {
+  margin: 1.5rem auto 0;
+  width: 120px;
+  height: 4px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    var(--color-accent-primary) 25%, 
+    var(--color-accent-dark) 50%, 
+    var(--color-accent-light) 75%, 
+    transparent 100%
+  );
+  border-radius: 2px;
+  box-shadow: 0 0 15px var(--glow-primary);
+  animation: lineGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes lineGlow {
+  from {
+    box-shadow: 0 0 15px var(--glow-primary);
+    opacity: 0.8;
+  }
+  to {
+    box-shadow: 0 0 25px var(--glow-light);
+    opacity: 1;
+  }
 }
 
 /* Main Title */
 .home-title {
-  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-size: clamp(1.8rem, 4vw, 3rem);
   font-weight: 600;
   color: var(--color-bg-white);
-  margin: 2rem 0 1rem;
-  line-height: 1.2;
-  text-shadow: var(--shadow-text);
-  letter-spacing: 0.02em;
+  margin: 2rem 0 1.5rem;
+  line-height: 1.3;
+  text-shadow: 
+    0 2px 10px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.01em;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
 }
 
+/* Subtitle */
 .home-subtitle {
-  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-  color: var(--color-gray-100);
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  color: rgba(255, 255, 255, 0.9);
   text-align: center;
   max-width: 700px;
-  margin: 0 auto;
+  margin: 10px auto;
   line-height: 1.6;
   font-weight: 300;
   text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.5);
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
 }
+
+/* אפקט ריחוף על כל ה-brand */
+.brand:hover .brand-name {
+  transform: translateY(-5px);
+  transition: transform 0.3s ease;
+}
+
+/* אנימציה של כניסה */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .brand-name {
+    font-size: clamp(2.5rem, 10vw, 4rem);
+  }
+  
+  .ai-highlight::before {
+    border-radius: 10px;
+  }
+  
+  .brand-accent-line {
+    width: 80px;
+    height: 3px;
+  }
+}
+
+
+/* ============================================
+   גופנים מומלצים להוסיף ב-HTML <head>
+   ============================================ *
 
 /* ====================================================================
    III. Dish Cards (אם תרצי להוסיף סטיילים לכרטיסיות)
