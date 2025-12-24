@@ -2,7 +2,6 @@ import con from "../db.js";
 
 const getDishes = async () => {
   try {
-    console.log("🔥 getDishes SQL CALLED");
     const sql = `
       SELECT 
         d.*,
@@ -12,7 +11,6 @@ const getDishes = async () => {
       WHERE d.in_stock = 1
     `;
     const [rows] = await con.query(sql);
-    console.log(Object.keys(rows[0]));
     return rows;
   } catch (err) {
     throw err;
