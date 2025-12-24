@@ -38,7 +38,7 @@ const prepareDataforGenAI = async () => {
              ingredients: ${dish.ingredients}, 
              price: ${dish.price},
              image_url: ${dish.image_url},
-             category_id: ${dish.category_id},
+             category_name: ${dish.category_name},
              is_vegan: ${dish.is_vegan},
              is_vegetarian: ${dish.is_vegetarian},
              on_sale: ${dish.on_sale},

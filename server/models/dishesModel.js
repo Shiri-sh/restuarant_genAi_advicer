@@ -2,8 +2,17 @@ import con from "../db.js";
 
 const getDishes = async () => {
   try {
-    const sql = "SELECT * FROM dishes WHERE in_stock = 1";
+    console.log("🔥 getDishes SQL CALLED");
+    const sql = `
+      SELECT 
+        d.*,
+        c.name AS category_name
+      FROM dishes d
+      JOIN categories c ON d.category_id = c.id
+      WHERE d.in_stock = 1
+    `;
     const [rows] = await con.query(sql);
+    console.log(Object.keys(rows[0]));
     return rows;
   } catch (err) {
     throw err;
