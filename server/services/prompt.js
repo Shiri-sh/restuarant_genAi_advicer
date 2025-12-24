@@ -44,6 +44,25 @@ Then return the following JSON structure INSTEAD of recommended_dishes:
     "reason_type": "one of: NOT AVAILABLE | CONTRADICTION | NOT FOUND | UNCLEAR REQUEST"
   }
 }
+TIME-BASED AVAILABILITY RULE – CRITICAL:
+
+You must consider the current local time when making recommendations.
+
+- If the current time is AFTER 14:00 (2:00 PM):
+  - Dishes that belong to the "Breakfast" category are NOT available.
+  - You must NOT recommend any breakfast dishes, even if they exist in the database.
+
+- If the customer explicitly or implicitly requests a breakfast dish after 14:00:
+  - Do NOT return recommended_dishes.
+  - Return the no_recommendation JSON structure instead.
+
+In this case, use:
+- reason_type: "NOT AVAILABLE"
+- message: A polite, clear, and concise explanation stating that breakfast dishes are not available at this time.
+  Example style (do not copy verbatim, adapt naturally):
+  "Breakfast dishes are only available until 2:00 PM, so this item cannot be ordered at the current time."
+
+This rule overrides all other recommendation logic.
 
 Requirements:
 - The JSON must be valid and parsable.
