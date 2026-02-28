@@ -3,14 +3,34 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 import fs from "fs";
 import dotenv from "dotenv";
 import path from "path";
-import prompt from "./prompt.js";
+// import prompt from "./prompt.js";
+import prompt from "./promptToSend.js";
 import { GoogleGenAI } from '@google/genai';
 import { convertToMp3, fileToGenerativePart } from "./fileActions.js";
 import { getDishes } from "../models/dishesModel.js";
-
 dotenv.config();
 const ai = new GoogleGenAI({ apiKey: process.env.GENAI_API_KEY });
+const CACHE_TTL = 10 * 60 * 1000;
+let lastFetchTime = null;
+let cachedDishes = null;
+const getAllDishes = async () => {
+    const now = Date.now();
 
+    if (cachedDishes && lastFetchTime && (now - lastFetchTime < CACHE_TTL)) {
+        console.log("Serving dishes from cache...");
+        return cachedDishes;
+    }
+
+    console.log("Cache expired or empty. Fetching from Database...");
+    try {
+        cachedDishes = await getDishes();
+        lastFetchTime = now;
+        return cachedDishes;
+    } catch (error) {
+        console.error("Failed to fetch dishes from DB:", error);
+        return cachedDishes || []; 
+    }
+}
 const prepareAudioforGenAI = async (file) => {
     let convertedFilePath = null;
     let originalFilePath = file.path;
@@ -31,7 +51,8 @@ const prepareAudioforGenAI = async (file) => {
 }
 const prepareDataforGenAI = async () => {
     try{
-    const dishes = await getDishes();
+    //const dishes = await getDishes();
+    const dishes = await getAllDishes();
     console.log("dishes",dishes);
     return dishes.map(dish => {
         return `name: ${dish.name},
