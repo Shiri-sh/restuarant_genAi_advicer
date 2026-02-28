@@ -2,11 +2,9 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 import fs from "fs";
 import dotenv from "dotenv";
-import { GoogleGenAI } from '@google/genai';
 import { getResponseFromGenAI, prepareAudioforGenAI, prepareDataforGenAI } from "../services/analyzeAudioServices.js";
 
 dotenv.config();
-const ai = new GoogleGenAI({ apiKey: process.env.GENAI_API_KEY });
 const analyzeAudio = async (req, res) => {
   let originalFilePath = null;
   let convertedFilePath = null;
@@ -20,6 +18,7 @@ const analyzeAudio = async (req, res) => {
     const { audioPart, originalFilePath: orig, convertedFilePath: conv } = await prepareAudioforGenAI(file);
     originalFilePath = orig;
     convertedFilePath = conv;
+    
     const dishesInfo = await prepareDataforGenAI();
     const result = await getResponseFromGenAI(audioPart, dishesInfo);
 
