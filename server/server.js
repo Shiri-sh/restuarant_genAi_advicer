@@ -4,7 +4,7 @@ import audioAnalyzeRouter from "./routes/audioAnalyzeRoute.js";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
-
+import {getDishes} from "./models/dishesModel.js";
 dotenv.config();
 
 // Debug environment variables
